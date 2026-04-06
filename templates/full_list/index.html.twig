@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LISTADO COMPLETO{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1 class="my-4">    Listado de Oficios / <a href="{{ path('app_full_register') }}" class="text-decoration-none">Registro</a></h1>
+
+    {# Botón para abrir el modal de agregar oficio #}
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalAddOficio">
+        Crear Nuevo Oficio
+    </button>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for oficio in oficios %}
+                <tr>
+                    <td>{{ oficio.id }}</td>
+                    <td>{{ oficio.name }}</td>
+                    <td>
+                        <button 
+                            class="btn {% if oficio.status %}btn-success{% else %}btn-danger{% endif %}" 
+                            data-id="{{ oficio.id }}" 
+                            data-status="{{ oficio.status ? 'true' : 'false' }}" 
+                            onclick="toggleStatus(this)">
+                            {% if oficio.status %}Habilitado{% else %}Deshabilitado{% endif %}
+                        </button>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">No se encontraron oficios</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para agregar oficio -->
+<div class="modal fade" id="modalAddOficio" tabindex="-1" aria-labelledby="modalAddOficioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAddOficioLabel">Agregar Oficio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="recomendacionForm" action="{{ path('app_oficio_nuevo') }}" method="post">
+                    <div class="mb-3">
+                        <label for="nombreOficio" class="form-label">Nombre del Oficio</label>
+                        <input type="text" class="form-control" id="nombreOficio" name="nombreOficio" placeholder="Ingrese el nombre del oficio" required>
+                    </div>
+                    <button type="submit" form="recomendacionForm" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function toggleStatus(button) {
+        const id = button.getAttribute('data-id');
+        let currentStatus = button.getAttribute('data-status') === 'true';
+        let newStatus = !currentStatus;
+
+        try {
+            let response = await fetch(`/oficio/${id}/toggle-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            if (!response.ok) {
+                console.error('Error en la respuesta del servidor.');
+                return;
+            }
+
+            window.location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
+{% endblock %}

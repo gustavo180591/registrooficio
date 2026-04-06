@@ -1,0 +1,37 @@
+{# templates/oficio/nuevo.html.twig #}
+<link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+
+<div class="modal fade" id="modalAddOficio" tabindex="-1" aria-labelledby="modalAddOficioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAddOficioLabel">Agregar Oficio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {# Formulario para agregar un nuevo oficio #}
+                <form action="{{ path('app_oficio_nuevo') }}" method="post">
+                    <div class="mb-3">
+                        <label for="nombreOficio" class="form-label">Nombre del Oficio</label>
+                        <input type="text" class="form-control" id="nombreOficio" name="nombreOficio" placeholder="Ingrese el nombre del oficio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="statusOficio" class="form-label">Estado del Oficio</label>
+                        <select class="form-select" id="statusOficio" name="statusOficio" required>
+                            <option value="" selected>Seleccione una opción</option>
+                            <option value="1">Habilitado</option>
+                            <option value="0">Deshabilitado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Opción para mostrar el modal #}
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddOficio">
+    Agregar Oficio
+</button>
+

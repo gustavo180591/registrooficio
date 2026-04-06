@@ -1,0 +1,61 @@
+sudo apt update
+sudo apt install snapd
+ps aux | grep packagekitd
+sudo systemctl stop packagekit
+sudo systemctl start packagekit
+sudo kill -9 983
+sudo apt install snapd
+sudo snap install wordpress-desktop
+symfony server:start
+composer update symfony/maker-bundle --with-all-dependencies
+
+composer require doctrine/inflector:^2.0
+rm composer.lock
+composer install
+git clone https://github.com/gustavo180591/oficio.git
+composer require symfony/orm-pack
+sudo apt install composer
+composer require symfony/orm-pack
+composer require --dev symfony/maker-bundle
+
+composer update symfony/maker-bundle --with-all-dependencies
+composer require --dev symfony/maker-bundle
+
+composer require doctrine/inflector:^2.0
+
+composer require symfony/maker-bundle
+composer update symfony/maker-bundle --with-all-dependencies
+composer require symfony/maker-bundle:^1.20
+sudo update-alternatives --set php /usr/bin/php8.2
+
+sudo apt-get install php-intl
+
+sudo service apache2 restart
+sudo apt-get install php8.2-intl
+
+cd oficio
+symfony server:start
+sudo symfony server:start
+wget https://get.symfony.com/cli/installer -O - | bash
+symfony server:start
+sudo add-apt-repository ppa:serge-rider/dbeaver-ce
+sudo apt-get update
+sudo apt-get install dbeaver-ce
+
+mysql
+sudo apt-get install php-curl
+sudo systemctl restart apache2
+
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install php8.2
+php -v
+sudo apt install php8.2-cli php8.2-common php8.2-mbstring php8.2-xml php8.2-curl
+composer update
+sudo apt-get install php8.2-mysql
+curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+sudo apt install symfony-cli
+symfony -v
+sudo systemctl restart apache2

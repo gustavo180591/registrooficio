@@ -1,0 +1,42 @@
+symfony server:start
+composer update symfony/maker-bundle --with-all-dependencies
+composer require doctrine/inflector:^2.0
+rm composer.lock
+composer install
+git clone https://github.com/gustavo180591/oficio.git
+composer require symfony/orm-pack
+sudo apt install composer
+composer require symfony/orm-pack
+composer require --dev symfony/maker-bundle
+composer update symfony/maker-bundle --with-all-dependencies
+composer require --dev symfony/maker-bundle
+composer require doctrine/inflector:^2.0
+composer require symfony/maker-bundle
+composer update symfony/maker-bundle --with-all-dependencies
+composer require symfony/maker-bundle:^1.20
+composer install
+ php -v
+ composer install
+ php bin/console doctrine:database:create
+ php bin/console make:entity
+ php bin/console make:migration
+ php bin/console cache:clear
+ php bin/console make:migration
+ php bin/console cache:clear
+ php bin/console make:migration
+ php bin/console doctrine:migrations:migrate
+ php bin/console make:entity
+ php bin/console make:migration
+ php bin/console doctrine:migrations:migrate
+ php bin/console make:controller
+symfony server:start
+php bin/console symfony server:start
+php bin/console server:start
+php bin/console symfony server:start
+symfony -v
+php bin/console make:controller
+composer require symfony/form
+php bin/console make:form
+php bin/console symfony server:start
+
+ 

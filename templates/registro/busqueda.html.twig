@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulario de Busqueda{% endblock %}
+
+{% block stylesheets %}
+<link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+{% block body %}
+<div class="container text-center my-5">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
+    </div>
+<div class="min-vh-100 d-flex justify-content-center align-items-center bg-light">
+    <div class="row w-100">
+        <div class="col-12 col-md-8 col-lg-6 mx-auto">
+             <div class="card shadow-lg w-100" style="max-width: 500px;">
+                <div class="card-body p-4">
+            <h2 class="text-center mb-4">Formulario de Busqueda</h2>
+
+            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+                 <div class="mb-3">
+                {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.oficio, {'attr': {'class': 'form-control', 'placeholder': 'INGRESE OFICIO', 'style': 'font-size: 1.5rem; text-transform: uppercase'}}) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.oficio) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.delegacion, 'Delegacion', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.delegacion, {'attr': {'class': 'form-control', 'placeholder': 'Ingrese su correo'}}) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.delegacion) }}
+                </div>
+            </div>      
+                        <a href="{{ path('app_registro') }}" class="bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition">
+                REGISTRARSE
+            </a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+

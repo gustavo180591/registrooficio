@@ -1,0 +1,344 @@
+{# templates/landing.html.twig #}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRO DE OFICIOS</title>
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-white flex flex-col items-center justify-center">
+    <div class="container flex justify-center my-4">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
+    </div>
+
+    <!-- Sección de Bienvenida -->
+    <div class="text-center mb-10 px-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-orange-500 mb-4">
+            BIENVENIDO AL REGISTRO DE OFICIOS DE LA CIUDAD DE POSADAS
+        </h1>
+        <p class="text-lg text-gray-700 mb-6">
+            ENCUENTRA Y CONECTA DE MANERA FÁCIL Y RÁPIDA CON TRABAJADORES DE DIFERENTES OFICIOS.
+        </p>
+
+        <!-- Botones -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="{{ path('app_lista') }}" class="bg-blue-500 text-xl text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                BUSCADOR
+            </a>
+            <a href="{{ path('app_registro') }}" class="bg-orange-500 text-xl text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition">
+                REGISTRARSE
+            </a>
+{#             <a href="{{ path('app_emprendimiento') }}" class="bg-green-500 text-xl text-white px-6 py-3 rounded-lg shadow-lg hover:bg-green-600 transition">
+                EMPRENDIMIENTOS
+            </a> #}
+        </div>
+    </div>
+
+    <!-- Sección de Videos -->
+    <div class="w-full max-w-7xl mx-auto px-4 pb-10 relative">
+        <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+            Testimonios De Nuestros Usuarios
+        </h2>
+        
+        <!-- Slider Container -->
+        <div class="relative">
+            <!-- Botón Anterior -->
+            <button onclick="slideLeft()" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            
+            <!-- Botón Siguiente -->
+            <button onclick="slideRight()" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            
+            <!-- Slider Wrapper -->
+            <div class="overflow-hidden mx-12">
+                <div id="videoSlider" class="flex transition-transform duration-500 ease-in-out">
+                    {% set videos = [
+                        {
+                            'title': '',
+                            'video': '1.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '2.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '3.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '4.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '5.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '6.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '7.mp4',
+                        },
+                        {
+                            'title': '',
+                            'video': '8.mp4',
+                        }            
+                        
+                    ] %}
+                    
+                    {% for video in videos %}
+                    <div class="flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
+                             onclick="openVideoModal('{{ asset('videos/' ~ video.video) }}', '{{ video.title }}')">
+                            <div class="relative bg-gray-200 overflow-hidden group">
+                                <div class="video-thumbnail-wrapper" style="position: relative;">
+                                    <video class="video-thumbnail w-full object-contain"
+                                           muted
+                                           preload="metadata"
+                                           data-src="{{ asset('videos/' ~ video.video) }}"
+                                           style="display: block; max-height: 300px;">
+                                        <source src="{{ asset('videos/' ~ video.video) }}#t=0.5" type="video/mp4">
+                                    </video>
+                                </div>
+                                <div class="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:bg-black group-hover:bg-opacity-20 transition-all duration-300">
+                                    <div class="bg-black bg-opacity-50 rounded-full p-3 md:p-4 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                                        <svg class="w-10 h-10 md:w-12 md:h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ video.title }}</h3>
+                                <p class="text-gray-600 text-sm">{{ video.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Indicadores -->
+            <div class="flex justify-center mt-6 gap-2">
+                {% for i in 0..videos|length-1 %}
+                <button onclick="slideTo({{ i }})" 
+                        class="slide-indicator w-2 h-2 rounded-full bg-gray-400 transition-all duration-300"
+                        data-index="{{ i }}"></button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para reproducir videos -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center p-4 md:p-8">
+        <div class="relative w-full max-w-3xl mx-auto">
+            <button onclick="closeVideoModal()" 
+                    class="absolute -top-10 right-0 md:-top-12 md:right-0 text-white hover:text-gray-300 transition z-10">
+                <svg class="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="bg-black rounded-lg overflow-hidden shadow-2xl">
+                <div class="relative" style="padding-top: 56.25%;">
+                    <video id="videoPlayer" 
+                           controls 
+                           autoplay 
+                           class="absolute inset-0 w-full h-full"
+                           controlsList="nodownload"
+                           style="max-height: 80vh;">
+                        <source src="" type="video/mp4">
+                        Tu navegador no soporta el elemento video.
+                    </video>
+                </div>
+            </div>
+            <h3 id="videoTitle" class="text-white text-lg md:text-xl mt-4 text-center px-4"></h3>
+        </div>
+    </div>
+
+    <script>
+        // Simple video thumbnail loading
+        function loadVideoThumbnails() {
+            // Videos already have preload="metadata" so they'll load their first frame automatically
+            // Center videos vertically when they load
+            const videos = document.querySelectorAll('.video-thumbnail');
+            videos.forEach(video => {
+                video.addEventListener('loadedmetadata', function() {
+                    const wrapper = this.closest('.video-thumbnail-wrapper');
+                    if (wrapper) {
+                        wrapper.style.display = 'flex';
+                        wrapper.style.alignItems = 'center';
+                        wrapper.style.justifyContent = 'center';
+                        wrapper.style.backgroundColor = '#1f2937'; // bg-gray-800
+                        wrapper.style.minHeight = '200px';
+                    }
+                });
+            });
+        }
+
+        // Variables para el slider
+        let currentSlide = 0;
+        const slider = document.getElementById('videoSlider');
+        const totalSlides = {{ videos|length }};
+        let slidesPerView = 1;
+        let autoSlideInterval;
+        
+        // Detectar cantidad de slides visibles según el tamaño de pantalla
+        function updateSlidesPerView() {
+            if (window.innerWidth >= 1024) {
+                slidesPerView = 3;
+            } else if (window.innerWidth >= 768) {
+                slidesPerView = 2;
+            } else {
+                slidesPerView = 1;
+            }
+        }
+        
+        // Actualizar indicadores
+        function updateIndicators() {
+            document.querySelectorAll('.slide-indicator').forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('bg-orange-500', 'w-8');
+                    indicator.classList.remove('bg-gray-400', 'w-2');
+                } else {
+                    indicator.classList.remove('bg-orange-500', 'w-8');
+                    indicator.classList.add('bg-gray-400', 'w-2');
+                }
+            });
+        }
+        
+        // Mover slider a posición específica
+        function moveToSlide(index) {
+            currentSlide = index;
+            const slideWidth = 100 / slidesPerView;
+            slider.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+            updateIndicators();
+        }
+        
+        // Navegar a la izquierda
+        function slideLeft() {
+            currentSlide = currentSlide > 0 ? currentSlide - 1 : totalSlides - slidesPerView;
+            moveToSlide(currentSlide);
+            resetAutoSlide();
+        }
+        
+        // Navegar a la derecha
+        function slideRight() {
+            currentSlide = currentSlide < totalSlides - slidesPerView ? currentSlide + 1 : 0;
+            moveToSlide(currentSlide);
+            resetAutoSlide();
+        }
+        
+        // Ir a slide específico
+        function slideTo(index) {
+            currentSlide = Math.min(index, totalSlides - slidesPerView);
+            moveToSlide(currentSlide);
+            resetAutoSlide();
+        }
+        
+        // Auto-slide
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                slideRight();
+            }, 5000);
+        }
+        
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+        
+        // Touch/Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        slider.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        slider.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                slideRight();
+            }
+            if (touchEndX > touchStartX + 50) {
+                slideLeft();
+            }
+        }
+        
+        // Modal functions
+        function openVideoModal(videoUrl, title) {
+            const modal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoTitle = document.getElementById('videoTitle');
+            
+            videoPlayer.src = videoUrl;
+            videoTitle.textContent = title;
+            modal.classList.remove('hidden');
+            
+            // Pausar auto-slide
+            clearInterval(autoSlideInterval);
+            
+            // Reproducir el video
+            videoPlayer.play();
+        }
+        
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            // Pausar y resetear el video
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            
+            modal.classList.add('hidden');
+            
+            // Reanudar auto-slide
+            startAutoSlide();
+        }
+        
+        // Cerrar modal al hacer clic fuera del video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+        
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+        
+        // Inicializar
+        window.addEventListener('load', () => {
+            updateSlidesPerView();
+            updateIndicators();
+            startAutoSlide();
+            loadVideoThumbnails();
+        });
+        
+        // Actualizar en resize
+        window.addEventListener('resize', () => {
+            updateSlidesPerView();
+            moveToSlide(Math.min(currentSlide, totalSlides - slidesPerView));
+        });
+    </script>
+</body>
+</html>
+
