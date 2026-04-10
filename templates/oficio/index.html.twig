@@ -100,15 +100,15 @@
                     {% for video in videos %}
                     <div class="flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
-                             onclick="openVideoModal('{{ asset('videos/' ~ video.video) }}', '{{ video.title }}')">
+                             onclick="openVideoModal('{{ asset('uploads/videos/' ~ video.video) }}', '{{ video.title }}')">
                             <div class="relative bg-gray-200 overflow-hidden group">
                                 <div class="video-thumbnail-wrapper" style="position: relative;">
                                     <video class="video-thumbnail w-full object-contain"
                                            muted
                                            preload="metadata"
-                                           data-src="{{ asset('videos/' ~ video.video) }}"
+                                           data-src="{{ asset('uploads/videos/' ~ video.video) }}"
                                            style="display: block; max-height: 300px;">
-                                        <source src="{{ asset('videos/' ~ video.video) }}#t=0.5" type="video/mp4">
+                                        <source src="{{ asset('uploads/videos/' ~ video.video) }}#t=0.5" type="video/mp4">
                                     </video>
                                 </div>
                                 <div class="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:bg-black group-hover:bg-opacity-20 transition-all duration-300">
