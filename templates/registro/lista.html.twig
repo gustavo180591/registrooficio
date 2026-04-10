@@ -177,7 +177,7 @@ LISTA DE REGISTROS
                                     <p><strong>CERTIFICACIÓN:</strong> NO</p>
                                 {% endif %}
                                 {% if registro.images %}
-                                    <p><strong>IMÁGENES:</strong> {% if registro.images %}<a href="{{ asset('images/products/' ~ registro.images) }}" target="_blank"><img src="{{ asset('images/products/' ~ registro.images) }}" width="100"></a>{% endif %}</p>
+                                    <p><strong>IMÁGENES:</strong> {% if registro.images %}<a href="{{ asset('uploads/images/products/' ~ registro.images) }}" target="_blank"><img src="{{ asset('uploads/images/products/' ~ registro.images) }}" width="100"></a>{% endif %}</p>
                                 {% endif %}
 <p><strong>DELEGACIONES DONDE PRESTA SERVICIO:</strong>
 				{% for delegacion in registro.delegacion %}
