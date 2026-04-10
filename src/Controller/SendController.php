@@ -29,7 +29,7 @@ return $this->render('registro/success.html.twig', ['nombre' => $nombre]);
     private function sendEmail(MailerInterface $mailer, KernelInterface $kernel, string $nombre, string $emailDestino)
     {
         // Obtén la ruta física de la imagen
-        $imagePath = $kernel->getProjectDir() . '/public/images/logo.png';
+        $imagePath = $kernel->getProjectDir() . '/public/uploads/images/logo.png';
     
         $email = (new Email())
             ->from('registrodeoficios.ar@gmail.com') // Correo de origen
