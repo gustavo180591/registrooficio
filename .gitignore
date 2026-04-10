@@ -25,3 +25,8 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> multimedia ###
+/public/images/
+/public/videos/
+###< multimedia ###
