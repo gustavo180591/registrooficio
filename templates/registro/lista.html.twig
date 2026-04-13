@@ -100,6 +100,183 @@
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
     
+    /* Live search styling */
+    .search-container {
+        position: relative;
+    }
+    .search-input {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        padding-right: 2.5rem;
+    }
+    .search-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 1.2rem;
+        z-index: 10;
+    }
+    .search-clear:hover {
+        color: #495057;
+    }
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-top: none;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .search-result-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid #f8f9fa;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        transition: background-color 0.2s ease;
+    }
+    .search-result-item:hover {
+        background-color: #f8f9fa;
+    }
+    .search-result-item.active {
+        background-color: #007bff;
+        color: white;
+    }
+    .search-highlight {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .search-result-item.active .search-highlight {
+        color: white;
+    }
+    .no-results {
+        padding: 1rem;
+        text-align: center;
+        color: #6c757d;
+        font-size: 1.2rem;
+    }
+    
+    /* Custom dropdown with integrated search styling */
+    .custom-dropdown-container {
+        position: relative;
+    }
+    .custom-dropdown-trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        background: white;
+        cursor: pointer;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .custom-dropdown-trigger:hover {
+        border-color: #86b7fe;
+    }
+    .custom-dropdown-trigger:focus,
+    .custom-dropdown-trigger.active {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        outline: 0;
+    }
+    .selected-text {
+        flex-grow: 1;
+        color: #495057;
+    }
+    .selected-text.placeholder {
+        color: #6c757d;
+    }
+    .dropdown-arrow {
+        color: #6c757d;
+        transition: transform 0.2s ease;
+    }
+    .custom-dropdown-trigger.active .dropdown-arrow {
+        transform: rotate(180deg);
+    }
+    .custom-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 0.375rem 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        max-height: 400px;
+        overflow: hidden;
+    }
+    .dropdown-search {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+        position: relative;
+    }
+    .dropdown-search .search-input {
+        border: 1px solid #ced4da;
+        padding-right: 2.5rem;
+    }
+    .dropdown-search .search-clear {
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 1.2rem;
+        z-index: 10;
+    }
+    .dropdown-search .search-clear:hover {
+        color: #495057;
+    }
+    .dropdown-options {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .dropdown-option {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid #f8f9fa;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        transition: background-color 0.2s ease;
+    }
+    .dropdown-option:hover {
+        background-color: #f8f9fa;
+    }
+    .dropdown-option.selected {
+        background-color: #e9ecef;
+        font-weight: bold;
+    }
+    .dropdown-option.no-results {
+        padding: 1rem;
+        text-align: center;
+        color: #6c757d;
+        font-size: 1.2rem;
+        cursor: default;
+    }
+    .dropdown-option.no-results:hover {
+        background-color: transparent;
+    }
+    .search-highlight {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .dropdown-option.selected .search-highlight {
+        color: #0056b3;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .pagination-lg .page-link {
@@ -109,6 +286,17 @@
         .btn-lg {
             padding: 0.5rem 1rem;
             font-size: 1rem;
+        }
+        .custom-dropdown-trigger {
+            font-size: 1.2rem;
+            padding: 0.6rem 0.8rem;
+        }
+        .dropdown-option {
+            font-size: 1.1rem;
+            padding: 0.6rem 0.8rem;
+        }
+        .dropdown-search .search-input {
+            font-size: 1.1rem;
         }
     }
 </style>
@@ -148,14 +336,43 @@ LISTA DE REGISTROS
             <div class="mb-3 row">
                 <div class="col-md-6">
                     {{ form_label(form.oficio, 'OFICIO', {'label_attr': {'class': 'form-label', 'style': 'font-size: 1.5rem;'}}) }}
+                    
+                    <!-- Hidden original select for form submission -->
                     {{ form_widget(form.oficio, {
                         'attr': {
-                            'class': 'form-select',
-                            'style': 'font-size: 1.5rem; text-transform: uppercase'
-                        },
-                        'placeholder': '-- SELECCIONAR UN OFICIO --',
-                        'empty_data': '-- SELECCIONAR UN OFICIO --'
+                            'style': 'display: none;',
+                            'id': 'busqueda_oficio'
+                        }
                     }) }}
+                    
+                    <!-- Custom dropdown with integrated search -->
+                    <div class="custom-dropdown-container">
+                        <div class="custom-dropdown-trigger" id="oficio-dropdown-trigger">
+                            <span id="oficio-selected-text" class="selected-text">-- SELECCIONAR UN OFICIO --</span>
+                            <span class="dropdown-arrow"> <i class="fas fa-chevron-down"></i> </span>
+                        </div>
+                        
+                        <div class="custom-dropdown-menu" id="oficio-dropdown-menu" style="display: none;">
+                            <!-- Search input inside dropdown -->
+                            <div class="dropdown-search">
+                                <input type="text" 
+                                       id="oficio-search" 
+                                       class="form-control search-input" 
+                                       placeholder="BUSCAR AQUÍ..."
+                                       style="font-size: 1.3rem; text-transform: uppercase"
+                                       autocomplete="off">
+                                <span id="search-clear" class="search-clear" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </div>
+                            
+                            <!-- Options container -->
+                            <div class="dropdown-options" id="dropdown-options">
+                                <!-- Options will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="invalid-feedback" style="font-size: 1.5rem;">
                         {{ form_errors(form.oficio) }}
                     </div>
@@ -450,4 +667,218 @@ LISTA DE REGISTROS
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Custom dropdown with integrated search functionality
+    const dropdownTrigger = document.getElementById('oficio-dropdown-trigger');
+    const dropdownMenu = document.getElementById('oficio-dropdown-menu');
+    const searchInput = document.getElementById('oficio-search');
+    const searchClear = document.getElementById('search-clear');
+    const optionsContainer = document.getElementById('dropdown-options');
+    const selectedText = document.getElementById('oficio-selected-text');
+    const originalSelect = document.getElementById('busqueda_oficio');
+    
+    if (!dropdownTrigger || !originalSelect) return;
+    
+    // Store all options from original select
+    const allOptions = Array.from(originalSelect.options).map(option => ({
+        value: option.value,
+        text: option.text,
+        selected: option.selected
+    }));
+    
+    let isDropdownOpen = false;
+    let selectedIndex = -1;
+    let filteredOptions = [...allOptions];
+    
+    // Initialize dropdown with all options
+    renderOptions(allOptions);
+    
+    // Toggle dropdown
+    dropdownTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+    
+    function toggleDropdown() {
+        isDropdownOpen = !isDropdownOpen;
+        if (isDropdownOpen) {
+            dropdownMenu.style.display = 'block';
+            dropdownTrigger.classList.add('active');
+            searchInput.focus();
+        } else {
+            dropdownMenu.style.display = 'none';
+            dropdownTrigger.classList.remove('active');
+            clearSearch();
+        }
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdownTrigger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+    
+    function closeDropdown() {
+        isDropdownOpen = false;
+        dropdownMenu.style.display = 'none';
+        dropdownTrigger.classList.remove('active');
+        clearSearch();
+    }
+    
+    // Search functionality
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            filteredOptions = [...allOptions];
+            searchClear.style.display = 'none';
+        } else {
+            searchClear.style.display = 'block';
+            filteredOptions = allOptions.filter(option => {
+                if (option.value !== '') { // Skip placeholder
+                    return option.text.toLowerCase().includes(searchTerm);
+                }
+                return false;
+            });
+        }
+        
+        renderOptions(filteredOptions);
+        selectedIndex = -1;
+    });
+    
+    // Clear search
+    searchClear.addEventListener('click', function() {
+        clearSearch();
+    });
+    
+    function clearSearch() {
+        searchInput.value = '';
+        searchClear.style.display = 'none';
+        filteredOptions = [...allOptions];
+        renderOptions(allOptions);
+        selectedIndex = -1;
+    }
+    
+    // Render options
+    function renderOptions(options) {
+        if (options.length === 0) {
+            optionsContainer.innerHTML = '<div class="dropdown-option no-results">No se encontraron resultados</div>';
+            return;
+        }
+        
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const html = options.map((option, index) => {
+            let displayText = option.text;
+            if (searchTerm) {
+                displayText = highlightMatch(option.text, searchTerm);
+            }
+            
+            const isSelected = option.value === originalSelect.value;
+            return `<div class="dropdown-option ${isSelected ? 'selected' : ''}" data-value="${option.value}" data-index="${index}">
+                ${displayText}
+            </div>`;
+        }).join('');
+        
+        optionsContainer.innerHTML = html;
+        
+        // Add click handlers to options
+        optionsContainer.querySelectorAll('.dropdown-option:not(.no-results)').forEach(option => {
+            option.addEventListener('click', function() {
+                selectOption(this.dataset.value);
+            });
+        });
+    }
+    
+    // Highlight matching text
+    function highlightMatch(text, searchTerm) {
+        const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+    
+    // Escape regex special characters
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    // Select option
+    function selectOption(value) {
+        originalSelect.value = value;
+        
+        // Update display
+        const selectedOption = allOptions.find(opt => opt.value === value);
+        if (selectedOption) {
+            selectedText.textContent = selectedOption.text;
+            selectedText.classList.remove('placeholder');
+        } else {
+            selectedText.textContent = '-- SELECCIONAR UN OFICIO --';
+            selectedText.classList.add('placeholder');
+        }
+        
+        // Re-render options to update selected state
+        renderOptions(filteredOptions);
+        
+        // Close dropdown
+        closeDropdown();
+        
+        // Trigger change event
+        const event = new Event('change', { bubbles: true });
+        originalSelect.dispatchEvent(event);
+    }
+    
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', function(e) {
+        const options = optionsContainer.querySelectorAll('.dropdown-option:not(.no-results)');
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, options.length - 1);
+                updateKeyboardSelection(options);
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateKeyboardSelection(options);
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (selectedIndex >= 0 && options[selectedIndex]) {
+                    selectOption(options[selectedIndex].dataset.value);
+                }
+                break;
+            case 'Escape':
+                closeDropdown();
+                break;
+        }
+    });
+    
+    // Update keyboard selection
+    function updateKeyboardSelection(options) {
+        options.forEach((option, index) => {
+            option.classList.toggle('selected', index === selectedIndex);
+        });
+        
+        if (selectedIndex >= 0 && options[selectedIndex]) {
+            options[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    // Initialize with current selection
+    if (originalSelect.value) {
+        const selectedOption = allOptions.find(opt => opt.value === originalSelect.value);
+        if (selectedOption) {
+            selectedText.textContent = selectedOption.text;
+            selectedText.classList.remove('placeholder');
+        }
+    } else {
+        selectedText.textContent = '-- SELECCIONAR UN OFICIO --';
+        selectedText.classList.add('placeholder');
+    }
+});
+</script>
 {% endblock %}
