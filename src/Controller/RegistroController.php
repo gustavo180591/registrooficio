@@ -45,36 +45,67 @@ class RegistroController extends AbstractController
     {
         $registro = new Registro();
         $form = $this->createForm(BusquedaType::class, $registro);
-
         $form->handleRequest($request);
 
         // Si se envía el formulario, buscar con los filtros aplicados
         if ($form->isSubmitted() && $form->isValid()) {
             $oficio = $registro->getOficio();
             $delegaciones = $registro->getDelegacion()->toArray();
-
-            $lista = $entityManager->getRepository(Registro::class)->buscar($oficio, $delegaciones);
-
+            
+            // Get pagination parameters
+            $page = $request->query->get('page', 1);
+            $limit = 12;
+            
+            $lista = $entityManager->getRepository(Registro::class)->buscar($oficio, $delegaciones, $page, $limit);
+            
+            // Get total count for pagination
+            $totalItems = $entityManager->getRepository(Registro::class)->countResults($oficio, $delegaciones);
+            $totalPages = ceil($totalItems / $limit);
+            
             return $this->render('registro/lista.html.twig', [
                 'lista' => $lista,
                 'form' => $form,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalItems' => $totalItems,
+                'limit' => $limit
             ]);
         }
-
+        
         // Filtrar registros habilitados (status = 1)
+        $page = $request->query->get('page', 1);
+        $limit = 12;
+        
         $query = $entityManager->createQuery(
             'SELECT r 
              FROM App\Entity\Registro r
 JOIN r.oficio o 
              WHERE r.status = :status
 ORDER BY o.name ASC, r.name ASC'
-        )->setParameter('status', true);
-
+        )->setParameter('status', true)
+        ->setFirstResult(($page - 1) * $limit)
+        ->setMaxResults($limit);
+        
         $lista = $query->getResult();
-
+        
+        // Get total count for pagination
+        $totalQuery = $entityManager->createQuery(
+            'SELECT COUNT(r.id) 
+             FROM App\Entity\Registro r
+JOIN r.oficio o 
+             WHERE r.status = :status'
+        )->setParameter('status', true);
+        
+        $totalItems = (int)$totalQuery->getSingleScalarResult();
+        $totalPages = ceil($totalItems / $limit);
+        
         return $this->render('registro/lista.html.twig', [
             'lista' => $lista,
             'form' => $form,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalItems' => $totalItems,
+            'limit' => $limit
         ]);
     }
 

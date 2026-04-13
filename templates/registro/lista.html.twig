@@ -12,28 +12,38 @@
         border: none;
         border-radius: 0.5rem;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-     .card-body {
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+    }
+    .card-body {
         padding: 1.5rem;
     }
-       .card-title {
+    .card-title {
         font-size: 1.5rem;
         font-weight: bold;
         text-transform: uppercase;
     }
-       .btn {
+    .btn {
         border-radius: 0.5rem;
         padding: 0.5rem 1rem;
         font-size: 1.25rem;
+        transition: all 0.3s ease;
     }
-        .card-text {
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    }
+    .card-text {
         font-size: 1.25rem;
     }
-       .btn-primary {
+    .btn-primary {
         background-color: #343a40;
         border-color: #343a40;
     }
-     .btn-success {
+    .btn-success {
         background-color: #28a745;
         border-color: #28a745;
     }
@@ -51,7 +61,57 @@
         font-weight: bold;
         text-transform: uppercase;
     }
-    </style>
+    
+    /* Enhanced pagination styles */
+    .pagination .page-link {
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0056b3;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+    
+    /* Badge styling */
+    .badge {
+        font-size: 0.9em;
+        border-radius: 0.5rem;
+    }
+    
+    /* Dropdown styling */
+    .dropdown-menu {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    /* Input group styling */
+    .input-group .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .pagination-lg .page-link {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+    }
+</style>
 {% endblock %}
 {% block title %}
 LISTA DE REGISTROS
@@ -122,43 +182,197 @@ LISTA DE REGISTROS
     </div>
 </div>
 
-
 <div class="container mt-5">
-<h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold;">LISTA DE REGISTROS</h2>
+    <h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold;">LISTA DE REGISTROS</h2>
+    
+    <!-- Results counter and home button -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <a href="{{ path('app_oficio') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-home me-2"></i>INICIO
+            </a>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="d-flex align-items-center justify-content-center">
+                <span class="badge bg-primary fs-6 p-2">
+                    <i class="fas fa-list me-2"></i>
+                    {{ ((currentPage - 1) * limit + 1) }}-{{ min(currentPage * limit, totalItems) }} de {{ totalItems }} resultados
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if totalPages > 1 %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-file-alt me-2"></i>Página {{ currentPage }} de {{ totalPages }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for page in 1..totalPages %}
+                            <li><a class="dropdown-item {% if page == currentPage %}active{% endif %}" href="{{ path('app_lista', {'page': page}) }}">Página {{ page }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Cards grid -->
     <div class="row">
         {% for registro in lista %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title" style="font-size: 1.5rem;">{{ registro.name|upper }} ({{registro.oficio.name|upper}})</h5>
-                        <p class="card-text" style="font-size: 1.25rem;">DESCRIPCIÓN: {{ registro.description|upper }}</p>
-                        <p class="card-text" style="font-size: 1.25rem;">HORARIO DE ATENCIÓN: {{ registro.time|upper }}</p>
-                        <p class="card-text" style="font-size: 1.25rem;">MÉTODOS DE PAGO: {{ registro.payment|upper }}</p>
-                        <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#modal-{{ registro.id }}" style="height: 50px; width: 150px;">
-                            <span class="text-center">VER MÁS</span>
-                        </button>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm hover-shadow transition-all">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center mb-3" style="font-size: 1.3rem; font-weight: bold;">
+                            {{ registro.name|upper }}
+                            <small class="d-block text-muted">({{ registro.oficio.name|upper }})</small>
+                        </h5>
+                        <div class="flex-grow-1">
+                            <p class="card-text mb-2" style="font-size: 1.1rem;">
+                                <i class="fas fa-briefcase me-2 text-primary"></i>
+                                <strong>DESCRIPCIÓN:</strong> {{ registro.description|upper }}
+                            </p>
+                            <p class="card-text mb-2" style="font-size: 1.1rem;">
+                                <i class="fas fa-clock me-2 text-success"></i>
+                                <strong>HORARIO:</strong> {{ registro.time|upper }}
+                            </p>
+                            <p class="card-text mb-3" style="font-size: 1.1rem;">
+                                <i class="fas fa-credit-card me-2 text-warning"></i>
+                                <strong>PAGO:</strong> {{ registro.payment|upper }}
+                            </p>
+                        </div>
+                        <div class="mt-auto">
+                            <button type="button" class="btn btn-primary w-100 d-flex align-items-center justify-content-center" 
+                                    data-bs-toggle="modal" data-bs-target="#modal-{{ registro.id }}" 
+                                    style="height: 50px; font-size: 1.1rem;">
+                                <i class="fas fa-eye me-2"></i>
+                                <span>VER DETALLES</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Enhanced pagination controls -->
+    {% if totalPages > 1 %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                <ul class="pagination pagination-lg">
+                    <!-- First page -->
+                    {% if currentPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': 1}) }}" title="Primera página">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Previous page -->
+                    {% if currentPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': currentPage - 1}) }}" title="Página anterior">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Page numbers with smart display -->
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(totalPages, currentPage + 2) %}
+                    
+                    {% if startPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': 1}) }}">1</a>
+                        </li>
+                        {% if startPage > 2 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% for page in startPage..endPage %}
+                        {% if page == currentPage %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('app_lista', {'page': page}) }}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if endPage < totalPages %}
+                        {% if endPage < totalPages - 1 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': totalPages}) }}">{{ totalPages }}</a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Next page -->
+                    {% if currentPage < totalPages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': currentPage + 1}) }}" title="Página siguiente">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Last page -->
+                    {% if currentPage < totalPages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('app_lista', {'page': totalPages}) }}" title="Última página">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Quick navigation -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-center align-items-center gap-3">
+                <span class="text-muted">Ir a página:</span>
+                <div class="input-group" style="max-width: 200px;">
+                    <input type="number" class="form-control" id="pageInput" min="1" max="{{ totalPages }}" value="{{ currentPage }}" 
+                           onkeypress="if(event.key === 'Enter') window.location.href='{{ path('app_lista') }}?page=' + this.value">
+                    <button class="btn btn-outline-primary" onclick="window.location.href='{{ path('app_lista') }}?page=' + document.getElementById('pageInput').value">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <span class="text-muted">de {{ totalPages }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 
-                <!-- Modal -->
-                <style>
-                    .modal-content {
-                        max-height: 80vh;
-                        overflow-y: scroll;
-                        padding: 2%;
-                    }
-                </style>
-                <div class="modal fade" id="modal-{{ registro.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ registro.id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel-{{ registro.id }}" style="font-size: 1.5rem;">DETALLES DE {{ registro.name|upper }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>NRO. DE REGISTRO:</strong> {{ registro.id }}</p>
-                                <p><strong>NOMBRE:</strong> {{ registro.name|upper }}</p>
-                                <p><strong>OFICIO:</strong> {{ registro.oficio.name|upper }}</p>
+{% for registro in lista %}
+    <!-- Modal -->
+    <style>
+        .modal-content {
+            max-height: 80vh;
+            overflow-y: scroll;
+            padding: 2%;
+        }
+    </style>
+    <div class="modal fade" id="modal-{{ registro.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ registro.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel-{{ registro.id }}" style="font-size: 1.5rem;">DETALLES DE {{ registro.name|upper }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>NRO. DE REGISTRO:</strong> {{ registro.id }}</p>
+                    <p><strong>NOMBRE:</strong> {{ registro.name|upper }}</p>
+                    <p><strong>OFICIO:</strong> {{ registro.oficio.name|upper }}</p>
 {% if registro.workAddress %}
     <p><strong>DOMICILIO LABORAL:</strong> {{ registro.workAddress|upper }}</p>
 {% else %}

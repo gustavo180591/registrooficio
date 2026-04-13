@@ -18,17 +18,32 @@ class RegistroRepository extends ServiceEntityRepository
 /**
      * Método personalizado para buscar registros por oficio y delegación.
      */
-    public function buscar($oficio, array $delegaciones)
+    public function buscar($oficio, array $delegaciones, $page = 1, $limit = 12)
     {
-        return $this->createQueryBuilder('r')
+        $query = $this->createQueryBuilder('r')
             ->join('r.delegacion', 'd')  // Hacemos un JOIN con la tabla delegacion
             ->andWhere('r.oficio = :oficio')
             ->andWhere('d.id IN (:delegaciones)')  // Filtramos usando los IDs de las delegaciones
             ->orderBy('r.name','ASC')
-		->setParameter('oficio', $oficio)
+            ->setParameter('oficio', $oficio)
+            ->setParameter('delegaciones', $delegaciones)
+            ->setFirstResult(($page - 1) * $limit)  // Offset calculation
+            ->setMaxResults($limit);  // Limit results per page
+            
+        return $query->getQuery()->getResult();
+    }
+    
+    public function countResults($oficio, array $delegaciones)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->join('r.delegacion', 'd')
+            ->andWhere('r.oficio = :oficio')
+            ->andWhere('d.id IN (:delegaciones)')
+            ->setParameter('oficio', $oficio)
             ->setParameter('delegaciones', $delegaciones)
             ->getQuery()
-            ->getResult();
+            ->getSingleScalarResult();
     }
     
     //    /**
