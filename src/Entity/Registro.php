@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: RegistroRepository::class)]
@@ -22,36 +23,45 @@ class Registro
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'El nombre es obligatorio.')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'La fecha de nacimiento es obligatoria.')]
+    #[Assert\Type(\DateTimeInterface::class)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'El teléfono es obligatorio.')]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'El DNI es obligatorio.')]
     private ?string $dni = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'La dirección es obligatoria.')]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $workAddress = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'El método de pago es obligatorio.')]
     private ?string $payment = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'El horario es obligatorio.')]
     private ?string $time = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Debe indicar si posee certificación.')]
     private ?bool $certification = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -145,7 +155,7 @@ class Registro
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

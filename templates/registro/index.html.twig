@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
 {% block title %}Registrarse - Registro de Oficios{% endblock %}
 
 {% block stylesheets %}
@@ -54,6 +56,191 @@
             max-height: 250px;
         }
     }
+    
+    /* Custom dropdown with integrated search - para selector de oficios */
+    .custom-dropdown-container {
+        position: relative;
+    }
+    
+    .custom-dropdown-trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-md);
+        background: var(--color-white);
+        cursor: pointer;
+        font-size: var(--font-size-base);
+        transition: all var(--transition-fast);
+        min-height: 48px;
+    }
+    
+    .custom-dropdown-trigger:hover {
+        border-color: var(--color-primary);
+    }
+    
+    .custom-dropdown-trigger.active {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+    
+    .custom-dropdown-trigger .selected-text {
+        flex-grow: 1;
+        color: var(--color-dark);
+        text-transform: uppercase;
+    }
+    
+    .custom-dropdown-trigger .selected-text.placeholder {
+        color: var(--color-gray-500);
+    }
+    
+    .dropdown-arrow {
+        color: var(--color-gray-500);
+        transition: transform var(--transition-fast);
+        margin-left: 0.5rem;
+    }
+    
+    .custom-dropdown-trigger.active .dropdown-arrow {
+        transform: rotate(180deg);
+    }
+    
+    .custom-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: var(--color-white);
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        z-index: 1050;
+        max-height: 400px;
+        overflow: hidden;
+    }
+    
+    .dropdown-search {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--color-gray-200);
+        position: relative;
+    }
+    
+    .dropdown-search .search-input {
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--radius-md);
+        padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+        font-size: var(--font-size-base);
+        width: 100%;
+        text-transform: uppercase;
+    }
+    
+    .dropdown-search .search-input:focus {
+        border-color: var(--color-primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+    
+    .dropdown-search .search-clear {
+        position: absolute;
+        right: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--color-gray-500);
+        font-size: 1rem;
+        z-index: 10;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all var(--transition-fast);
+    }
+    
+    .dropdown-search .search-clear:hover {
+        background-color: var(--color-gray-200);
+        color: var(--color-dark);
+    }
+    
+    .dropdown-options {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+    
+    .dropdown-option {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid var(--color-gray-100);
+        font-size: var(--font-size-base);
+        text-transform: uppercase;
+        transition: background-color var(--transition-fast);
+        color: var(--color-dark);
+    }
+    
+    .dropdown-option:hover {
+        background-color: var(--color-gray-100);
+    }
+    
+    .dropdown-option.selected {
+        background-color: rgba(249, 115, 22, 0.1);
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+    
+    .dropdown-option.no-results {
+        padding: 1rem;
+        text-align: center;
+        color: var(--color-gray-500);
+        font-size: var(--font-size-sm);
+        cursor: default;
+    }
+    
+    .search-highlight {
+        font-weight: 700;
+        color: var(--color-primary);
+        background-color: rgba(249, 115, 22, 0.2);
+        padding: 0 2px;
+        border-radius: 2px;
+    }
+    
+    /* Scrollbar personalizado */
+    .dropdown-options::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .dropdown-options::-webkit-scrollbar-track {
+        background: var(--color-gray-100);
+    }
+    
+    .dropdown-options::-webkit-scrollbar-thumb {
+        background: var(--color-gray-300);
+        border-radius: 4px;
+    }
+    
+    .dropdown-options::-webkit-scrollbar-thumb:hover {
+        background: var(--color-gray-500);
+    }
+    
+    @media (max-width: 576px) {
+        .custom-dropdown-trigger {
+            font-size: var(--font-size-sm);
+            padding: 0.75rem;
+        }
+        
+        .dropdown-option {
+            font-size: var(--font-size-sm);
+            padding: 0.625rem 0.75rem;
+        }
+        
+        .custom-dropdown-menu {
+            max-height: 350px;
+        }
+        
+        .dropdown-options {
+            max-height: 230px;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -86,6 +273,13 @@
             
             <div class="card-modern-body">
                 {{ form_start(form, {'attr': {'class': 'form-modern needs-validation', 'novalidate': 'novalidate'}}) }}
+                
+                {# Mostrar errores globales del formulario #}
+                {% if form.vars.errors|length > 0 %}
+                    <div class="alert alert-danger mb-3">
+                        <i class="fas fa-exclamation-circle me-2"></i>Por favor, complete todos los campos obligatorios.
+                    </div>
+                {% endif %}
 
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -127,7 +321,32 @@
                     
                     <div class="col-12">
                         {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(form.oficio, {'attr': {'class': 'form-select', 'style': 'text-transform: uppercase'}}) }}
+                        
+                        <!-- Select original oculto para el formulario -->
+                        {{ form_widget(form.oficio, {'attr': {'style': 'display: none;'}}) }}
+                        
+                        <!-- Custom dropdown con búsqueda integrada -->
+                        <div class="custom-dropdown-container">
+                            <div class="custom-dropdown-trigger" id="oficio-dropdown-trigger">
+                                <span id="oficio-selected-text" class="selected-text placeholder">-- Seleccionar un oficio --</span>
+                                <span class="dropdown-arrow"><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                            
+                            <div class="custom-dropdown-menu" id="oficio-dropdown-menu" style="display: none;">
+                                <div class="dropdown-search">
+                                    <input type="text" 
+                                           id="oficio-search" 
+                                           class="form-control search-input" 
+                                           placeholder="Buscar oficio..."
+                                           autocomplete="off">
+                                    <span id="search-clear" class="search-clear" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                    </span>
+                                </div>
+                                <div class="dropdown-options" id="dropdown-options"></div>
+                            </div>
+                        </div>
+                        
                         <div class="invalid-feedback">{{ form_errors(form.oficio) }}</div>
                         
                         <button type="button" class="btn btn-link btn-select-all mt-2 p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#recomendacionModal">
@@ -299,6 +518,160 @@
                     ? '<i class="fas fa-check-double me-1"></i>Seleccionar todas'
                     : '<i class="fas fa-times me-1"></i>Desmarcar todas';
             });
+        }
+        
+        // Dropdown personalizado con búsqueda integrada para oficios
+        const dropdownTrigger = document.getElementById('oficio-dropdown-trigger');
+        const dropdownMenu = document.getElementById('oficio-dropdown-menu');
+        const searchInput = document.getElementById('oficio-search');
+        const searchClear = document.getElementById('search-clear');
+        const optionsContainer = document.getElementById('dropdown-options');
+        const selectedText = document.getElementById('oficio-selected-text');
+        const originalSelect = document.getElementById('registro_oficio');
+        
+        if (dropdownTrigger && originalSelect) {
+            // Almacenar todas las opciones del select original
+            const allOptions = Array.from(originalSelect.options).map(option => ({
+                value: option.value,
+                text: option.text,
+                selected: option.selected
+            }));
+            
+            let isDropdownOpen = false;
+            let filteredOptions = [...allOptions];
+            
+            // Inicializar dropdown con todas las opciones
+            renderOptions(allOptions);
+            
+            // Toggle dropdown
+            dropdownTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown();
+            });
+            
+            function toggleDropdown() {
+                isDropdownOpen = !isDropdownOpen;
+                if (isDropdownOpen) {
+                    dropdownMenu.style.display = 'block';
+                    dropdownTrigger.classList.add('active');
+                    searchInput.focus();
+                } else {
+                    dropdownMenu.style.display = 'none';
+                    dropdownTrigger.classList.remove('active');
+                    clearSearch();
+                }
+            }
+            
+            // Cerrar dropdown al hacer click fuera
+            document.addEventListener('click', function(e) {
+                if (!dropdownTrigger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+            
+            function closeDropdown() {
+                isDropdownOpen = false;
+                dropdownMenu.style.display = 'none';
+                dropdownTrigger.classList.remove('active');
+                clearSearch();
+            }
+            
+            // Funcionalidad de búsqueda
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    filteredOptions = [...allOptions];
+                    searchClear.style.display = 'none';
+                } else {
+                    searchClear.style.display = 'block';
+                    filteredOptions = allOptions.filter(option => {
+                        if (option.value !== '') {
+                            return option.text.toLowerCase().includes(searchTerm);
+                        }
+                        return false;
+                    });
+                }
+                
+                renderOptions(filteredOptions);
+            });
+            
+            // Limpiar búsqueda
+            searchClear.addEventListener('click', function() {
+                clearSearch();
+                searchInput.focus();
+            });
+            
+            function clearSearch() {
+                searchInput.value = '';
+                searchClear.style.display = 'none';
+                filteredOptions = [...allOptions];
+                renderOptions(allOptions);
+            }
+            
+            // Renderizar opciones
+            function renderOptions(options) {
+                if (options.length === 0) {
+                    optionsContainer.innerHTML = '<div class="dropdown-option no-results">No se encontraron resultados</div>';
+                    return;
+                }
+                
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const html = options.map((option) => {
+                    let displayText = option.text;
+                    if (searchTerm) {
+                        displayText = highlightMatch(option.text, searchTerm);
+                    }
+                    
+                    const isSelected = option.value === originalSelect.value;
+                    return '<div class="dropdown-option ' + (isSelected ? 'selected' : '') + '" data-value="' + option.value + '">' + displayText + '</div>';
+                }).join('');
+                
+                optionsContainer.innerHTML = html;
+                
+                // Agregar event listeners a las opciones
+                optionsContainer.querySelectorAll('.dropdown-option:not(.no-results)').forEach(option => {
+                    option.addEventListener('click', function() {
+                        selectOption(this.dataset.value);
+                    });
+                });
+            }
+            
+            // Resaltar texto coincidente
+            function highlightMatch(text, searchTerm) {
+                const regex = new RegExp('(' + escapeRegex(searchTerm) + ')', 'gi');
+                return text.replace(regex, '<span class="search-highlight">$1</span>');
+            }
+            
+            // Escapar caracteres especiales de regex
+            function escapeRegex(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+            
+            // Seleccionar opción
+            function selectOption(value) {
+                originalSelect.value = value;
+                
+                // Actualizar display
+                const selectedOption = allOptions.find(opt => opt.value === value);
+                if (selectedOption && selectedOption.value !== '') {
+                    selectedText.textContent = selectedOption.text;
+                    selectedText.classList.remove('placeholder');
+                } else {
+                    selectedText.textContent = '-- Seleccionar un oficio --';
+                    selectedText.classList.add('placeholder');
+                }
+                
+                // Re-renderizar para actualizar estado seleccionado
+                renderOptions(filteredOptions);
+                
+                // Cerrar dropdown
+                closeDropdown();
+                
+                // Disparar evento change
+                const event = new Event('change', { bubbles: true });
+                originalSelect.dispatchEvent(event);
+            }
         }
     });
 </script>

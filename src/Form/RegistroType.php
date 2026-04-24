@@ -30,13 +30,14 @@ class RegistroType extends AbstractType
                 'label' => 'Correo Electrónico',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Ingrese su correo electrónico'],
             ])
-            // Descripción
+            // Descripción (opcional)
             ->add('description', TextArea::class, [
-                'label' => 'Descripción',
+                'label' => 'Descripción (opcional)',
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'maxlength' => 250,
-                    'placeholder' => 'Ingrese una descripción (máximo 250 caracteres)',
+                    'placeholder' => 'Ingrese una descripción (opcional, máximo 250 caracteres)',
                 ],
             ])
             // Fecha
