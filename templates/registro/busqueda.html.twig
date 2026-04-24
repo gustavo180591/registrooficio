@@ -1,47 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Formulario de Busqueda{% endblock %}
+{% block title %}Buscar Profesionales - Registro de Oficios{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
 <link rel="shortcut icon" href="{{ asset('uploads/images/favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
 {% block body %}
-<div class="container text-center my-5">
-        <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
-    </div>
-<div class="min-vh-100 d-flex justify-content-center align-items-center bg-light">
-    <div class="row w-100">
-        <div class="col-12 col-md-8 col-lg-6 mx-auto">
-             <div class="card shadow-lg w-100" style="max-width: 500px;">
-                <div class="card-body p-4">
-            <h2 class="text-center mb-4">Formulario de Busqueda</h2>
-
-            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-
-                 <div class="mb-3">
-                {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.oficio, {'attr': {'class': 'form-control', 'placeholder': 'INGRESE OFICIO', 'style': 'font-size: 1.5rem; text-transform: uppercase'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.oficio) }}
-                </div>
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.delegacion, 'Delegacion', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.delegacion, {'attr': {'class': 'form-control', 'placeholder': 'Ingrese su correo'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.delegacion) }}
-                </div>
-            </div>      
-                        <a href="{{ path('app_registro') }}" class="bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-orange-600 transition">
-                REGISTRARSE
-            </a>
-            {{ form_end(form) }}
+<!-- Header -->
+<header class="bg-white shadow-sm py-3 mb-4">
+    <div class="container-modern">
+        <div class="text-center">
+            <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 50px;">
         </div>
     </div>
+</header>
+
+<!-- Formulario de Búsqueda Simple -->
+<section class="py-5">
+    <div class="container-modern" style="max-width: 500px;">
+        <div class="card-modern">
+            <div class="card-modern-header bg-gradient text-white text-center" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
+                <h2 class="fs-4 fw-bold mb-0">
+                    <i class="fas fa-search me-2"></i>BUSCAR PROFESIONALES
+                </h2>
+            </div>
+            
+            <div class="card-modern-body">
+                {{ form_start(form, {'attr': {'class': 'form-modern needs-validation', 'novalidate': 'novalidate'}}) }}
+                
+                <div class="mb-3">
+                    {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.oficio, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Seleccione un oficio', 'style': 'text-transform: uppercase'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.oficio) }}</div>
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.delegacion, 'Delegación', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.delegacion, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Seleccione una delegación'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.delegacion) }}</div>
+                </div>
+                
+                <div class="d-grid gap-3">
+                    <button type="submit" class="btn-modern btn-modern-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>BUSCAR
+                    </button>
+                    
+                    <a href="{{ path('app_registro') }}" class="btn-modern btn-modern-outline">
+                        <i class="fas fa-user-plus me-2"></i>REGISTRARSE
+                    </a>
+                </div>
+                
+                {{ form_end(form) }}
+            </div>
+        </div>
+        
+        <!-- Enlaces adicionales -->
+        <div class="text-center mt-4">
+            <a href="{{ path('app_oficio') }}" class="text-decoration-none text-muted">
+                <i class="fas fa-home me-1"></i>Volver al inicio
+            </a>
+        </div>
     </div>
-    </div>
-</div>
+</section>
 {% endblock %}
 

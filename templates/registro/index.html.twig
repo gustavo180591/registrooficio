@@ -1,237 +1,305 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}FORMULARIO DE REGISTRO{% endblock %}
+{% block title %}Registrarse - Registro de Oficios{% endblock %}
+
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Incluye Bootstrap CSS si no está ya incluido -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('uploads/images/favicon.ico') }}" type="image/x-icon">
-{% endblock %}
-{% block body %}
-<div class="container text-center my-5">
-        <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
-    </div>
-<div class="min-vh-100 d-flex justify-content-center align-items-center  p-4">
-    <div class="card shadow-lg w-100" style="max-width: 500px;">
-        <div class="d-grid gap-2 col-10 mx-auto my-2">
-        <a href="{{ path('app_oficio') }}" class="btn btn-secondary">VOLVER AL INICIO</a>
-    </div>
-        <div class="card-body p-4">
-            <h2 class="text-center mb-4">FORMULARIO DE REGISTRO</h2>
-
-            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-
-            <div class="mb-3">
-                {{ form_label(form.name, 'NOMBRE Y APELLIDO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'INGRESE SU NOMBRE Y APELLIDO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.name) }}
-                </div>
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.email, 'CORREO ELECTRÓNICO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'INGRESE SU CORREO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.email) }}
-                </div>
-            </div>          
-            <div class="mb-3">
-                {{ form_label(form.date, 'FECHA DE NACIMIENTO Ej: 01-01-2000', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.date, {'attr': {'class': 'form-control date-input', 'placeholder': 'DD-MM-AAAA'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.date) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.description, 'DESCRIPCIÓN', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'DESCRIPCIÓN DE SU ACTIVIDAD LABORAL'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.description) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.phone, 'TELÉFONO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': 'TELÉFONO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.phone) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.dni, 'DNI', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.dni, {'attr': {'class': 'form-control', 'placeholder': 'DNI'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.dni) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.address, 'DIRECCIÓN', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'DIRECCIÓN'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.address) }}
-                </div>
-            </div>
-                        
-              <div class="mb-3">
-                {{ form_label(form.oficio, 'OFICIO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.oficio, {'attr': {'class': 'form-control', 'placeholder': '-- SELECCIONAR UN OFICIO --', 'style': 'text-transform: uppercase'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.oficio) }}
-                </div>
-
-            <div class="mb-3">
-                <button type="button" class="btn mt-4" style="border-radius: 0.5rem; border: 2px solid #007bff; background: transparent; color: black" data-toggle="modal" data-target="#recomendacionModal">
-                    ¿TU OFICIO NO ESTÁ EN LA LISTA?
-                </button>
-            </div>
-
-            <!-- Modal -->
-            </div>
-              <div class="mb-3">
-    {{ form_label(form.delegacion, 'DELEGACIÓN', {'label_attr': {'class': 'form-label'}}) }}
+{{ parent() }}
+<link rel="shortcut icon" href="{{ asset('uploads/images/favicon.ico') }}" type="image/x-icon">
+<style>
+    /* Estilos específicos para el formulario de registro */
+    .delegaciones-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.75rem;
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 1rem;
+        background: var(--color-gray-100);
+        border-radius: var(--radius-md);
+    }
     
-    <!-- Botón para seleccionar todas las delegaciones -->
-    <button type="button" class="btn btn-link" id="select-all-delegaciones">SELECCIONAR TODAS LAS DELEGACIONES</button>
+    .delegaciones-grid .form-check {
+        margin: 0;
+        padding: 0.5rem;
+        background: white;
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+    
+    .delegaciones-grid .form-check:hover {
+        background: rgba(249, 115, 22, 0.1);
+    }
+    
+    .delegaciones-grid .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.5rem;
+        cursor: pointer;
+    }
+    
+    .delegaciones-grid .form-check-label {
+        cursor: pointer;
+        font-size: var(--font-size-sm);
+        text-transform: uppercase;
+    }
+    
+    .btn-select-all {
+        font-size: var(--font-size-sm);
+        padding: 0.5rem 1rem;
+    }
+    
+    @media (max-width: 576px) {
+        .delegaciones-grid {
+            grid-template-columns: 1fr;
+            max-height: 250px;
+        }
+    }
+</style>
+{% endblock %}
 
-    <div class="form-check-group" id="delegacion-container">
-        {% for child in form.delegacion %}
-            <div class="form-check mb-3"> <!-- Espacio entre cada checkbox -->
-                <!-- Añadir la clase 'delegacion-checkbox' a cada checkbox -->
-                {{ form_widget(child, {'attr': {'class': 'form-check-input me-3 delegacion-checkbox'}}) }}
-                {{ form_label(child) }}
+{% block body %}
+<!-- Header -->
+<header class="bg-white shadow-sm py-3 mb-4">
+    <div class="container-modern">
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="{{ path('app_oficio') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-2"></i>VOLVER
+            </a>
+            <div class="text-center flex-grow-1">
+                <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
             </div>
-        {% endfor %}
+            <div style="width: 80px;"></div><!-- Spacer for balance -->
+        </div>
     </div>
-    <div class="invalid-feedback">
-        {{ form_errors(form.delegacion) }}
-    </div>
-</div>
-            <div class="mb-3">
-                {{ form_label(form.workAddress, 'DIRECCIÓN DE TRABAJO (OPCIONAL)', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.workAddress, {'attr': {'class': 'form-control', 'placeholder': 'DIRECCIÓN DE TRABAJO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.workAddress) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.payment, 'TIPO DE PAGO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.payment, {'attr': {'class': 'form-control', 'placeholder': 'TIPO DE PAGO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.payment) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.time, 'HORARIO DE TRABAJO', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.time, {'attr': {'class': 'form-control', 'placeholder': 'HORARIO DE TRABAJO'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.time) }}
-                </div>
-            </div>
-    <div class="mb-3 d-flex align-items-center">
-    {{ form_label(form.certification, '¿POSEE CERTIFICACIÓN?', {'label_attr': {'class': 'form-label me-2'}}) }}
+</header>
 
-    <div class="form-check form-check-inline me-3">
-        {{ form_widget(form.certification.0, {'attr': {'class': 'form-check-input'}}) }}
-        {{ form_label(form.certification.0, 'SÍ', {'label_attr': {'class': 'form-check-label'}}) }}
-    </div>
-
-    <div class="form-check form-check-inline">
-        {{ form_widget(form.certification.1, {'attr': {'class': 'form-check-input'}}) }}
-        {{ form_label(form.certification.1, 'NO', {'label_attr': {'class': 'form-check-label'}}) }}
-    </div>
-
-    <div class="invalid-feedback">
-        {{ form_errors(form.certification) }}
-    </div>
-</div>
-            <div class="mb-3">
-                {{ form_label(form.institution, 'INSTITUCIÓN', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.institution, {'attr': {'class': 'form-control', 'placeholder': 'INSTITUCIÓN CERTIFICANTE'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.institution) }}
-                </div>
-            </div>
-            <div class="mb-3">
-                {{ form_label(form.recomendation, 'REFERENCIA LABORAL', {'label_attr': {'class': 'form-label text-uppercase'}}) }}
-                {{ form_widget(form.recomendation, {'attr':{'class': 'form-control text-uppercase', 'placeholder': 'POSEE ALGUNA REFERENCIA LABORAL'}}) }}
-                <div class="invalid-feedback">
-                    {{ form_errors(form.recomendation) }}
-                </div>
-            </div>
-            <div class="mb-3">
-    {{ form_label(form.imageFile, 'IMAGEN/LOGO (OPCIONAL)', {'label_attr': {'class': 'form-label text-uppercase'}}) }}
-    {{ form_widget(form.imageFile, {'attr': {'class': 'form-control', 'placeholder': 'Seleccionar Imagen/Logo', 'required': false}}) }}
-    <div class="invalid-feedback">
-        {{ form_errors(form.imageFile) }}
-    </div>
-</div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary text-uppercase">REGISTRARSE</button>
+<!-- Formulario de Registro -->
+<section class="py-4">
+    <div class="container-modern" style="max-width: 800px;">
+        <div class="card-modern">
+            <div class="card-modern-header bg-gradient text-white text-center" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
+                <h2 class="fs-4 fw-bold mb-0">
+                    <i class="fas fa-user-plus me-2"></i>FORMULARIO DE REGISTRO
+                </h2>
+                <p class="mb-0 mt-1 text-white-50 small">Complete sus datos para registrarse en el sistema</p>
             </div>
             
-            {{ form_end(form) }}
+            <div class="card-modern-body">
+                {{ form_start(form, {'attr': {'class': 'form-modern needs-validation', 'novalidate': 'novalidate'}}) }}
 
-        </div>
-                    <div class="modal fade" id="recomendacionModal" tabindex="-1" role="dialog" aria-labelledby="recomendacionModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="recomendacionModalLabel">SOLICITUD DE OFICIO</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="recomendacionForm" method="POST" action="{{ path('app_crear_recomendacion') }}">
-                                <div class="form-group">
-                                    <label for="recomendacionText">POR FAVOR INGRESE UNA DESCRIPCIÓN DEL OFICIO QUE DESEA SOLICITAR (LA SOLICITUD ESTÁ SUJETA A APROBACIÓN)</label>
-                                    <input type="text" class="form-control" id="recomendacionText" name="recomendacionText" required>
-                                </div>
-                                <!-- Puedes añadir más campos si es necesario -->
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
-                            <button type="submit" form="recomendacionForm" class="btn btn-primary">ENVIAR</button>
-                        </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ form_label(form.name, 'Nombre y Apellido', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ingrese su nombre completo'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.name) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.email, 'Correo Electrónico', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'correo@ejemplo.com'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.email) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.date, 'Fecha de Nacimiento', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.date, {'attr': {'class': 'form-control date-input', 'placeholder': 'DD-MM-AAAA'}}) }}
+                        <div class="form-text text-muted small">Ejemplo: 01-01-2000</div>
+                        <div class="invalid-feedback">{{ form_errors(form.date) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.dni, 'DNI', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.dni, {'attr': {'class': 'form-control', 'placeholder': 'Número de DNI'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.dni) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.phone, 'Teléfono', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': 'Teléfono de contacto'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.phone) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.address, 'Dirección', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Dirección personal'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.address) }}</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.oficio, {'attr': {'class': 'form-select', 'style': 'text-transform: uppercase'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.oficio) }}</div>
+                        
+                        <button type="button" class="btn btn-link btn-select-all mt-2 p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#recomendacionModal">
+                            <i class="fas fa-plus-circle me-1"></i>¿Tu oficio no está en la lista? Solicitar nuevo oficio
+                        </button>
+                    </div>
+                    
+                    <div class="col-12">
+                        {{ form_label(form.description, 'Descripción de su actividad', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Describa su actividad laboral', 'rows': '3'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.description) }}</div>
                     </div>
                 </div>
+
+                <!-- Delegaciones -->
+                <div class="mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        {{ form_label(form.delegacion, 'Delegaciones donde presta servicio', {'label_attr': {'class': 'form-label mb-0'}}) }}
+                        <button type="button" class="btn btn-outline-primary btn-sm btn-select-all" id="select-all-delegaciones">
+                            <i class="fas fa-check-double me-1"></i>Seleccionar todas
+                        </button>
+                    </div>
+                    
+                    <div class="delegaciones-grid" id="delegacion-container">
+                        {% for child in form.delegacion %}
+                            <div class="form-check">
+                                {{ form_widget(child, {'attr': {'class': 'form-check-input delegacion-checkbox'}}) }}
+                                {{ form_label(child, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="invalid-feedback">{{ form_errors(form.delegacion) }}</div>
+                </div>
+                <!-- Datos de trabajo -->
+                <div class="row g-3 mt-2">
+                    <div class="col-md-6">
+                        {{ form_label(form.workAddress, 'Dirección de trabajo (opcional)', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.workAddress, {'attr': {'class': 'form-control', 'placeholder': 'Dirección donde trabaja'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.workAddress) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.payment, 'Métodos de pago aceptados', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.payment, {'attr': {'class': 'form-control', 'placeholder': 'Ej: Efectivo, Transferencia'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.payment) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.time, 'Horario de atención', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.time, {'attr': {'class': 'form-control', 'placeholder': 'Ej: Lunes a Viernes 9-17hs'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.time) }}</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {{ form_label(form.recomendation, 'Referencias laborales', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.recomendation, {'attr': {'class': 'form-control', 'placeholder': 'Referencias de trabajos anteriores'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.recomendation) }}</div>
+                    </div>
+                </div>
+                
+                <!-- Certificación -->
+                <div class="mt-4">
+                    <label class="form-label">¿Posee certificación profesional?</label>
+                    <div class="d-flex gap-4 align-items-center">
+                        {% for child in form.certification %}
+                            <div class="form-check">
+                                {{ form_widget(child, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(child, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="invalid-feedback">{{ form_errors(form.certification) }}</div>
+                </div>
+                
+                <div class="mb-3">
+                    {{ form_label(form.institution, 'Institución certificante (si aplica)', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.institution, {'attr': {'class': 'form-control', 'placeholder': 'Nombre de la institución'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.institution) }}</div>
+                </div>
+                
+                <!-- Imagen -->
+                <div class="mb-4">
+                    {{ form_label(form.imageFile, 'Imagen o Logo (opcional)', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-text text-muted small">Formatos aceptados: JPG, PNG. Máximo 2MB.</div>
+                    <div class="invalid-feedback">{{ form_errors(form.imageFile) }}</div>
+                </div>
+                
+                <!-- Botón de envío -->
+                <div class="d-grid">
+                    <button type="submit" class="btn-modern btn-modern-primary btn-lg">
+                        <i class="fas fa-paper-plane me-2"></i>REGISTRARSE
+                    </button>
+                </div>
+                
+                {{ form_end(form) }}
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal de Solicitud de Oficio -->
+<div class="modal fade" id="recomendacionModal" tabindex="-1" aria-labelledby="recomendacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-xl">
+            <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
+                <h5 class="modal-title fw-bold" id="recomendacionModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Solicitar Nuevo Oficio
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="recomendacionForm" method="POST" action="{{ path('app_crear_recomendacion') }}">
+                    <div class="mb-3">
+                        <label for="recomendacionText" class="form-label">Descripción del oficio solicitado</label>
+                        <textarea class="form-control" id="recomendacionText" name="recomendacionText" rows="3" 
+                                  placeholder="Describa el oficio que desea agregar a la lista..." required></textarea>
+                        <div class="form-text text-muted">La solicitud será revisada antes de su aprobación.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-modern btn-modern-outline" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>CANCELAR
+                </button>
+                <button type="submit" form="recomendacionForm" class="btn-modern btn-modern-primary">
+                    <i class="fas fa-paper-plane me-2"></i>ENVIAR SOLICITUD
+                </button>
+            </div>
+        </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.date-input').on('input', function(e) {
-                let value = $(this).val().replace(/[^0-9]/g, ''); // Remueve todo lo que no sea número
+{{ parent() }}
+<script>
+    // Formato automático de fecha DD-MM-AAAA
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInputs = document.querySelectorAll('.date-input');
+        
+        dateInputs.forEach(function(input) {
+            input.addEventListener('input', function(e) {
+                let value = this.value.replace(/[^0-9]/g, '');
+                
                 if (value.length > 2 && value.length <= 4) {
                     value = value.replace(/(\d{2})(\d+)/, '$1-$2');
                 } else if (value.length > 4) {
                     value = value.replace(/(\d{2})(\d{2})(\d+)/, '$1-$2-$3');
                 }
-                $(this).val(value);
+                
+                this.value = value;
             });
         });
-    </script>
-    <!-- Incluye jQuery y Bootstrap JS si no están ya incluidos -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Script para seleccionar todas las delegaciones -->
-    <script>
-        $(document).ready(function() {
-            $('#select-all-delegaciones').click(function() {
-                // Marcar todos los checkboxes con la clase 'delegacion-checkbox'
-                $('.delegacion-checkbox').prop('checked', true);
+        
+        // Seleccionar todas las delegaciones
+        const selectAllBtn = document.getElementById('select-all-delegaciones');
+        if (selectAllBtn) {
+            selectAllBtn.addEventListener('click', function() {
+                const checkboxes = document.querySelectorAll('.delegacion-checkbox');
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = !allChecked;
+                });
+                
+                // Actualizar texto del botón
+                this.innerHTML = allChecked 
+                    ? '<i class="fas fa-check-double me-1"></i>Seleccionar todas'
+                    : '<i class="fas fa-times me-1"></i>Desmarcar todas';
             });
-        });
-    </script>
-
-    <footer class="bg-orange-500 w-full py-4 mt-auto text-center text-white">
-    </footer>
+        }
+    });
+</script>
 {% endblock %}

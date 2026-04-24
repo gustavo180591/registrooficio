@@ -1,303 +1,241 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{{ parent() }}
 <link rel="shortcut icon" href="{{ asset('uploads/images/favicon.ico') }}" type="image/x-icon">
+
 <style>
-    body {
-        font-family: 'Lato', sans-serif;
-        background-color: #f5f5f5;
-    }
-    .card {
-        border: none;
-        border-radius: 0.5rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
-    }
-    .card-body {
-        padding: 1.5rem;
-    }
-    .card-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-    .btn {
-        border-radius: 0.5rem;
-        padding: 0.5rem 1rem;
-        font-size: 1.25rem;
-        transition: all 0.3s ease;
-    }
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-    }
-    .card-text {
-        font-size: 1.25rem;
-    }
-    .btn-primary {
-        background-color: #343a40;
-        border-color: #343a40;
-    }
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-    .modal-content {
-        max-height: 80vh;
-        overflow-y: scroll;
-        padding: 2%;
-    }
-    .modal-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .modal-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
+    /* ============================================
+       LISTA.HTML.TWIG - ESTILOS ESPECÍFICOS
+       ============================================ */
     
-    /* Enhanced pagination styles */
-    .pagination .page-link {
-        color: #007bff;
-        border: 1px solid #dee2e6;
-        transition: all 0.3s ease;
-    }
-    .pagination .page-link:hover {
-        background-color: #e9ecef;
-        color: #0056b3;
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-    .pagination .page-item.disabled .page-link {
-        color: #6c757d;
-        background-color: #fff;
-        border-color: #dee2e6;
-    }
-    
-    /* Badge styling */
-    .badge {
-        font-size: 0.9em;
-        border-radius: 0.5rem;
-    }
-    
-    /* Dropdown styling */
-    .dropdown-menu {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    
-    /* Input group styling */
-    .input-group .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-    
-    /* Live search styling */
-    .search-container {
-        position: relative;
-    }
-    .search-input {
-        font-size: 1.5rem;
-        text-transform: uppercase;
-        padding-right: 2.5rem;
-    }
-    .search-clear {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-        font-size: 1.2rem;
-        z-index: 10;
-    }
-    .search-clear:hover {
-        color: #495057;
-    }
-    .search-results {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        border: 1px solid #dee2e6;
-        border-top: none;
-        max-height: 300px;
-        overflow-y: auto;
-        z-index: 1000;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-    .search-result-item {
-        padding: 0.75rem 1rem;
-        cursor: pointer;
-        border-bottom: 1px solid #f8f9fa;
-        font-size: 1.3rem;
-        text-transform: uppercase;
-        transition: background-color 0.2s ease;
-    }
-    .search-result-item:hover {
-        background-color: #f8f9fa;
-    }
-    .search-result-item.active {
-        background-color: #007bff;
-        color: white;
-    }
-    .search-highlight {
-        font-weight: bold;
-        color: #007bff;
-    }
-    .search-result-item.active .search-highlight {
-        color: white;
-    }
-    .no-results {
-        padding: 1rem;
-        text-align: center;
-        color: #6c757d;
-        font-size: 1.2rem;
-    }
-    
-    /* Custom dropdown with integrated search styling */
+    /* Custom dropdown with integrated search - CRÍTICO para funcionalidad */
     .custom-dropdown-container {
         position: relative;
     }
+    
     .custom-dropdown-trigger {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75rem 1rem;
-        border: 1px solid #ced4da;
-        border-radius: 0.375rem;
-        background: white;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-md);
+        background: var(--color-white);
         cursor: pointer;
-        font-size: 1.5rem;
-        text-transform: uppercase;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        font-size: var(--font-size-base);
+        transition: all var(--transition-fast);
+        min-height: 48px;
     }
+    
     .custom-dropdown-trigger:hover {
-        border-color: #86b7fe;
+        border-color: var(--color-primary);
     }
-    .custom-dropdown-trigger:focus,
+    
     .custom-dropdown-trigger.active {
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        outline: 0;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
     }
-    .selected-text {
+    
+    .custom-dropdown-trigger .selected-text {
         flex-grow: 1;
-        color: #495057;
+        color: var(--color-dark);
+        text-transform: uppercase;
     }
-    .selected-text.placeholder {
-        color: #6c757d;
+    
+    .custom-dropdown-trigger .selected-text.placeholder {
+        color: var(--color-gray-500);
     }
+    
     .dropdown-arrow {
-        color: #6c757d;
-        transition: transform 0.2s ease;
+        color: var(--color-gray-500);
+        transition: transform var(--transition-fast);
+        margin-left: 0.5rem;
     }
+    
     .custom-dropdown-trigger.active .dropdown-arrow {
         transform: rotate(180deg);
     }
+    
     .custom-dropdown-menu {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 4px);
         left: 0;
         right: 0;
-        background: white;
-        border: 1px solid #ced4da;
-        border-top: none;
-        border-radius: 0 0 0.375rem 0.375rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        z-index: 1000;
+        background: var(--color-white);
+        border: 2px solid var(--color-gray-200);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        z-index: 1050;
         max-height: 400px;
         overflow: hidden;
     }
+    
     .dropdown-search {
         padding: 0.75rem;
-        border-bottom: 1px solid #e9ecef;
+        border-bottom: 1px solid var(--color-gray-200);
         position: relative;
     }
+    
     .dropdown-search .search-input {
-        border: 1px solid #ced4da;
-        padding-right: 2.5rem;
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--radius-md);
+        padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+        font-size: var(--font-size-base);
+        width: 100%;
+        text-transform: uppercase;
     }
+    
+    .dropdown-search .search-input:focus {
+        border-color: var(--color-primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+    
     .dropdown-search .search-clear {
         position: absolute;
-        right: 1.5rem;
+        right: 1.25rem;
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
-        color: #6c757d;
-        font-size: 1.2rem;
+        color: var(--color-gray-500);
+        font-size: 1rem;
         z-index: 10;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all var(--transition-fast);
     }
+    
     .dropdown-search .search-clear:hover {
-        color: #495057;
+        background-color: var(--color-gray-200);
+        color: var(--color-dark);
     }
+    
     .dropdown-options {
-        max-height: 300px;
+        max-height: 280px;
         overflow-y: auto;
     }
+    
     .dropdown-option {
         padding: 0.75rem 1rem;
         cursor: pointer;
-        border-bottom: 1px solid #f8f9fa;
-        font-size: 1.3rem;
+        border-bottom: 1px solid var(--color-gray-100);
+        font-size: var(--font-size-base);
         text-transform: uppercase;
-        transition: background-color 0.2s ease;
+        transition: background-color var(--transition-fast);
+        color: var(--color-dark);
     }
+    
     .dropdown-option:hover {
-        background-color: #f8f9fa;
+        background-color: var(--color-gray-100);
     }
+    
     .dropdown-option.selected {
-        background-color: #e9ecef;
-        font-weight: bold;
+        background-color: rgba(249, 115, 22, 0.1);
+        color: var(--color-primary);
+        font-weight: 600;
     }
+    
     .dropdown-option.no-results {
         padding: 1rem;
         text-align: center;
-        color: #6c757d;
-        font-size: 1.2rem;
+        color: var(--color-gray-500);
+        font-size: var(--font-size-sm);
         cursor: default;
     }
-    .dropdown-option.no-results:hover {
-        background-color: transparent;
-    }
+    
     .search-highlight {
-        font-weight: bold;
-        color: #007bff;
-    }
-    .dropdown-option.selected .search-highlight {
-        color: #0056b3;
+        font-weight: 700;
+        color: var(--color-primary);
+        background-color: rgba(249, 115, 22, 0.2);
+        padding: 0 2px;
+        border-radius: 2px;
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .pagination-lg .page-link {
-            padding: 0.5rem 0.75rem;
-            font-size: 0.875rem;
-        }
-        .btn-lg {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-        }
+    /* Modal moderno - ajustes específicos */
+    .modal-content {
+        border: none;
+        overflow: hidden;
+    }
+    
+    .modal-header .rounded-circle {
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .modal-body .bg-light {
+        background-color: var(--color-gray-100) !important;
+    }
+    
+    /* Star rating moderno */
+    .star-rating {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .star-rating .form-check-input {
+        display: none;
+    }
+    
+    .star-rating .form-check-label {
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: transform var(--transition-fast);
+        filter: grayscale(100%);
+        opacity: 0.5;
+    }
+    
+    .star-rating .form-check-input:checked + .form-check-label,
+    .star-rating .form-check-label:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    
+    /* Ajustes responsive específicos */
+    @media (max-width: 576px) {
         .custom-dropdown-trigger {
-            font-size: 1.2rem;
-            padding: 0.6rem 0.8rem;
+            font-size: var(--font-size-sm);
+            padding: 0.75rem;
         }
+        
         .dropdown-option {
-            font-size: 1.1rem;
-            padding: 0.6rem 0.8rem;
+            font-size: var(--font-size-sm);
+            padding: 0.625rem 0.75rem;
         }
-        .dropdown-search .search-input {
-            font-size: 1.1rem;
+        
+        .custom-dropdown-menu {
+            max-height: 350px;
         }
+        
+        .dropdown-options {
+            max-height: 230px;
+        }
+        
+        .modal-dialog {
+            margin: 0.5rem;
+        }
+    }
+    
+    /* Scrollbar personalizado para el dropdown */
+    .dropdown-options::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .dropdown-options::-webkit-scrollbar-track {
+        background: var(--color-gray-100);
+    }
+    
+    .dropdown-options::-webkit-scrollbar-thumb {
+        background: var(--color-gray-300);
+        border-radius: 4px;
+    }
+    
+    .dropdown-options::-webkit-scrollbar-thumb:hover {
+        background: var(--color-gray-500);
     }
 </style>
 {% endblock %}
@@ -307,176 +245,165 @@ LISTA DE REGISTROS
 
 
 {% block body %}
-<div style="position: absolute; top: 1rem; left: 1rem;">
-    <div class="d-grid gap-2 col-1 mx-auto my-2">
-        <a href="{{ path('app_oficio') }}" class="btn btn-secondary">
-            <i class="fas fa-home"></i>
-        </a>
-    </div>
-</div>
-<div class="container text-center my-4">
-    <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 75%;">
-</div>
-<div class="d-flex justify-content-center">
-
-
-    <div class="card shadow-lg w-100" style="max-width: 90%;">
-        <div class="d-flex justify-content-center my-2">
-            <a href="{{ path('app_registro') }}" class="btn btn-success d-flex align-items-center justify-content-center" style="height: 50px; width: 300px; border: 0; background-color: #FFA500; hover: background-color: #FF9900;">
-                <span class="text-center">REGISTRARSE</span>
+<!-- Header compacto con navegación -->
+<header class="bg-white shadow-sm py-2">
+    <div class="container-modern">
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="{{ path('app_oficio') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                <i class="fas fa-arrow-left"></i>
+                <span class="d-none d-sm-inline">VOLVER</span>
+            </a>
+            <div class="text-center flex-grow-1">
+                <img src="{{ asset('uploads/images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 50px;">
+            </div>
+            <a href="{{ path('app_registro') }}" class="btn btn-modern btn-modern-primary btn-sm">
+                <i class="fas fa-plus me-1"></i>
+                <span class="d-none d-sm-inline">REGISTRARSE</span>
             </a>
         </div>
-        <div class="card-body p-4">
-            <h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold;">FORMULARIO DE BÚSQUEDA</h2>
+    </div>
+</header>
+
+<!-- Formulario de Búsqueda -->
+<section class="py-4">
+    <div class="container-modern">
+        <div class="card-modern">
+            <div class="card-modern-header bg-gradient" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
+                <h2 class="text-center text-white mb-0 fs-4 fw-bold">
+                    <i class="fas fa-search me-2"></i>BUSCAR PROFESIONALES
+                </h2>
+            </div>
+            <div class="card-modern-body">
+                {{ form_start(form, {'attr': {'class': 'form-modern needs-validation'}}) }}
 
 
-            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-
-
-            <div class="mb-3 row">
-                <div class="col-md-6">
-                    {{ form_label(form.oficio, 'OFICIO', {'label_attr': {'class': 'form-label', 'style': 'font-size: 1.5rem;'}}) }}
-                    
-                    <!-- Hidden original select for form submission -->
-                    {{ form_widget(form.oficio, {
-                        'attr': {
-                            'style': 'display: none;',
-                            'id': 'busqueda_oficio'
-                        }
-                    }) }}
-                    
-                    <!-- Custom dropdown with integrated search -->
-                    <div class="custom-dropdown-container">
-                        <div class="custom-dropdown-trigger" id="oficio-dropdown-trigger">
-                            <span id="oficio-selected-text" class="selected-text">-- SELECCIONAR UN OFICIO --</span>
-                            <span class="dropdown-arrow"> <i class="fas fa-chevron-down"></i> </span>
-                        </div>
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        {{ form_label(form.oficio, 'Oficio', {'label_attr': {'class': 'form-label'}}) }}
                         
-                        <div class="custom-dropdown-menu" id="oficio-dropdown-menu" style="display: none;">
-                            <!-- Search input inside dropdown -->
-                            <div class="dropdown-search">
-                                <input type="text" 
-                                       id="oficio-search" 
-                                       class="form-control search-input" 
-                                       placeholder="BUSCAR AQUÍ..."
-                                       style="font-size: 1.3rem; text-transform: uppercase"
-                                       autocomplete="off">
-                                <span id="search-clear" class="search-clear" style="display: none;">
-                                    <i class="fas fa-times"></i>
-                                </span>
+                        <!-- Hidden original select for form submission -->
+                        {{ form_widget(form.oficio, {
+                            'attr': {
+                                'style': 'display: none;',
+                                'id': 'busqueda_oficio'
+                            }
+                        }) }}
+                        
+                        <!-- Custom dropdown with integrated search -->
+                        <div class="custom-dropdown-container">
+                            <div class="custom-dropdown-trigger" id="oficio-dropdown-trigger">
+                                <span id="oficio-selected-text" class="selected-text">-- Seleccionar un oficio --</span>
+                                <span class="dropdown-arrow"> <i class="fas fa-chevron-down"></i> </span>
                             </div>
                             
-                            <!-- Options container -->
-                            <div class="dropdown-options" id="dropdown-options">
-                                <!-- Options will be populated by JavaScript -->
+                            <div class="custom-dropdown-menu" id="oficio-dropdown-menu" style="display: none;">
+                                <div class="dropdown-search">
+                                    <input type="text" 
+                                           id="oficio-search" 
+                                           class="form-control search-input" 
+                                           placeholder="Buscar aquí..."
+                                           autocomplete="off">
+                                    <span id="search-clear" class="search-clear" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                    </span>
+                                </div>
+                                <div class="dropdown-options" id="dropdown-options"></div>
                             </div>
+                        </div>
+                        
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.oficio) }}
                         </div>
                     </div>
                     
-                    <div class="invalid-feedback" style="font-size: 1.5rem;">
-                        {{ form_errors(form.oficio) }}
+                    <div class="col-lg-6">
+                        {{ form_label(form.delegacion, 'Delegación', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.delegacion, {'attr': {'class': 'form-control', 'placeholder': 'Ingrese delegación'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.delegacion) }}
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    {{ form_label(form.delegacion, 'DELEGACIÓN', {'label_attr': {'class': 'form-label', 'style': 'font-size: 1.5rem;'}}) }}
-                    {{ form_widget(form.delegacion, {'attr': {'class': 'form-control', 'placeholder': 'INGRESE DELEGACIÓN', 'style': 'font-size: 1.5rem;'}}) }}
-                    <div class="invalid-feedback" style="font-size: 1.5rem;">
-                        {{ form_errors(form.delegacion) }}
-                    </div>
+                
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn-modern btn-modern-primary w-100" style="max-width: 300px;">
+                        <i class="fas fa-search me-2"></i>BUSCAR
+                    </button>
                 </div>
+                
+                {{ form_end(form) }}
             </div>
- 
-            </div> 
-            <div class="d-flex justify-content-end my-2">
-                <button type="submit" class="btn btn-primary text-white d-flex align-items-center justify-content-center" style="height: 50px; width: 300px; background-color: #0d6efd; border-color: #0d6efd;">
-                    <span class="text-center">BUSCAR</span>
-                </button>
-            </div>
-            {{ form_end(form) }}
-
-
         </div>
     </div>
-</div>
+</section>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold;">LISTA DE REGISTROS</h2>
-    
-    <!-- Results counter and home button -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <a href="{{ path('app_oficio') }}" class="btn btn-secondary btn-lg">
-                <i class="fas fa-home me-2"></i>INICIO
-            </a>
-        </div>
-        <div class="col-md-4 text-center">
-            <div class="d-flex align-items-center justify-content-center">
-                <span class="badge bg-primary fs-6 p-2">
+<!-- Resultados de Búsqueda -->
+<section class="py-4">
+    <div class="container-modern">
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 mb-4">
+            <h2 class="heading-responsive fw-bold text-dark mb-0">
+                <i class="fas fa-users text-primary me-2"></i>Resultados
+            </h2>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-primary fs-6 px-3 py-2 shadow-sm">
                     <i class="fas fa-list me-2"></i>
-                    {{ ((currentPage - 1) * limit + 1) }}-{{ min(currentPage * limit, totalItems) }} de {{ totalItems }} resultados
+                    {{ ((currentPage - 1) * limit + 1) }}-{{ min(currentPage * limit, totalItems) }} de {{ totalItems }}
                 </span>
             </div>
         </div>
-        <div class="col-md-4 text-end">
-            {% if totalPages > 1 %}
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-file-alt me-2"></i>Página {{ currentPage }} de {{ totalPages }}
-                    </button>
-                    <ul class="dropdown-menu">
-                        {% for page in 1..totalPages %}
-                            <li><a class="dropdown-item {% if page == currentPage %}active{% endif %}" href="{{ path('app_lista', {'page': page}) }}">Página {{ page }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </div>
     
-    <!-- Cards grid -->
-    <div class="row">
-        {% for registro in lista %}
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 shadow-sm hover-shadow transition-all">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-center mb-3" style="font-size: 1.3rem; font-weight: bold;">
-                            {{ registro.name|upper }}
-                            <small class="d-block text-muted">({{ registro.oficio.name|upper }})</small>
-                        </h5>
-                        <div class="flex-grow-1">
-                            <p class="card-text mb-2" style="font-size: 1.1rem;">
-                                <i class="fas fa-briefcase me-2 text-primary"></i>
-                                <strong>DESCRIPCIÓN:</strong> {{ registro.description|upper }}
-                            </p>
-                            <p class="card-text mb-2" style="font-size: 1.1rem;">
-                                <i class="fas fa-clock me-2 text-success"></i>
-                                <strong>HORARIO:</strong> {{ registro.time|upper }}
-                            </p>
-                            <p class="card-text mb-3" style="font-size: 1.1rem;">
-                                <i class="fas fa-credit-card me-2 text-warning"></i>
-                                <strong>PAGO:</strong> {{ registro.payment|upper }}
-                            </p>
-                        </div>
-                        <div class="mt-auto">
-                            <button type="button" class="btn btn-primary w-100 d-flex align-items-center justify-content-center" 
-                                    data-bs-toggle="modal" data-bs-target="#modal-{{ registro.id }}" 
-                                    style="height: 50px; font-size: 1.1rem;">
-                                <i class="fas fa-eye me-2"></i>
-                                <span>VER DETALLES</span>
-                            </button>
+        <!-- Cards grid moderno -->
+        <div class="row g-4">
+            {% for registro in lista %}
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card-modern h-100 animate-fade-in" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                        <div class="card-modern-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 64px; height: 64px;">
+                                    <i class="fas fa-user-tie text-primary fs-3"></i>
+                                </div>
+                                <h3 class="fs-5 fw-bold text-dark mb-1 text-uppercase">
+                                    {{ registro.name|upper }}
+                                </h3>
+                                <span class="badge bg-secondary text-uppercase">
+                                    {{ registro.oficio.name|upper }}
+                                </span>
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-start gap-2 mb-2 text-responsive">
+                                    <i class="fas fa-briefcase text-primary mt-1 flex-shrink-0"></i>
+                                    <span class="text-gray-700">{{ registro.description|upper|length > 100 ? registro.description|upper|slice(0, 100) ~ '...' : registro.description|upper }}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mb-2 text-responsive">
+                                    <i class="fas fa-clock text-success flex-shrink-0"></i>
+                                    <span class="text-gray-700 text-uppercase">{{ registro.time|upper }}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 text-responsive">
+                                    <i class="fas fa-credit-card text-warning flex-shrink-0"></i>
+                                    <span class="text-gray-700 text-uppercase">{{ registro.payment|upper }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 pt-3 border-top">
+                                <button type="button" class="btn-modern btn-modern-primary w-100" 
+                                        data-bs-toggle="modal" data-bs-target="#modal-{{ registro.id }}">
+                                    <i class="fas fa-eye me-2"></i>VER DETALLES
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
     
-    <!-- Enhanced pagination controls -->
-    {% if totalPages > 1 %}
-    <div class="row mt-5">
-        <div class="col-12">
-            <nav aria-label="Page navigation" class="d-flex justify-content-center">
-                <ul class="pagination pagination-lg">
+        <!-- Paginación moderna -->
+        {% if totalPages > 1 %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Paginación" class="d-flex flex-column align-items-center gap-3">
+                    <ul class="pagination pagination-modern pagination-lg">
                     <!-- First page -->
                     {% if currentPage > 1 %}
                         <li class="page-item">
@@ -546,127 +473,222 @@ LISTA DE REGISTROS
                             </a>
                         </li>
                     {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </div>
-    
-    <!-- Quick navigation -->
-    <div class="row mt-3">
-        <div class="col-12">
-            <div class="d-flex justify-content-center align-items-center gap-3">
-                <span class="text-muted">Ir a página:</span>
-                <div class="input-group" style="max-width: 200px;">
-                    <input type="number" class="form-control" id="pageInput" min="1" max="{{ totalPages }}" value="{{ currentPage }}" 
-                           onkeypress="if(event.key === 'Enter') window.location.href='{{ path('app_lista') }}?page=' + this.value">
-                    <button class="btn btn-outline-primary" onclick="window.location.href='{{ path('app_lista') }}?page=' + document.getElementById('pageInput').value">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-                <span class="text-muted">de {{ totalPages }}</span>
+                    </ul>
+                    
+                    <!-- Navegación rápida por input -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted fs-6">Ir a:</span>
+                        <div class="input-group" style="max-width: 140px;">
+                            <input type="number" class="form-control form-control-sm text-center" 
+                                   id="pageInput" min="1" max="{{ totalPages }}" value="{{ currentPage }}" 
+                                   onkeypress="if(event.key === 'Enter') window.location.href='{{ path('app_lista') }}?page=' + this.value">
+                            <button class="btn btn-outline-primary btn-sm" type="button"
+                                    onclick="window.location.href='{{ path('app_lista') }}?page=' + document.getElementById('pageInput').value">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <span class="text-muted fs-6">de {{ totalPages }}</span>
+                    </div>
+                </nav>
             </div>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
+</section>
 
 {% for registro in lista %}
-    <!-- Modal -->
-    <style>
-        .modal-content {
-            max-height: 80vh;
-            overflow-y: scroll;
-            padding: 2%;
-        }
-    </style>
+    <!-- Modal Moderno -->
     <div class="modal fade" id="modal-{{ registro.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ registro.id }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel-{{ registro.id }}" style="font-size: 1.5rem;">DETALLES DE {{ registro.name|upper }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-xl" style="border-radius: var(--radius-lg);">
+                <div class="modal-header bg-gradient text-white" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); border-radius: var(--radius-lg) var(--radius-lg) 0 0;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-user-tie fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0" id="modalLabel-{{ registro.id }}">
+                                {{ registro.name|upper }}
+                            </h5>
+                            <small class="text-white-50">{{ registro.oficio.name|upper }}</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">
-                    <p><strong>NRO. DE REGISTRO:</strong> {{ registro.id }}</p>
-                    <p><strong>NOMBRE:</strong> {{ registro.name|upper }}</p>
-                    <p><strong>OFICIO:</strong> {{ registro.oficio.name|upper }}</p>
-{% if registro.workAddress %}
-    <p><strong>DOMICILIO LABORAL:</strong> {{ registro.workAddress|upper }}</p>
-{% else %}
-    <p><strong>DOMICILIO LABORAL:</strong> NO ESPECIFICADO</p>
-{% endif %}
-
-                                <p><strong>DESCRIPCIÓN:</strong> {{ registro.description|upper }}</p>
-                                <p><strong>TELÉFONO:</strong> {{ registro.phone|upper }}</p>
-                                <p><strong>EMAIL:</strong> {{ registro.email|upper }}</p>
-                                <p><strong>HORARIOS DE ATENCIÓN:</strong> {{ registro.time|upper }}</p>
-                                <p><strong>MÉTODOS DE PAGO:</strong> {{ registro.payment|upper }}</p>
-                                {% if registro.certification %}
-                                    <p><strong>CERTIFICACIÓN:</strong> SÍ</p>
-                                    <p><strong>INSTITUCIÓN CERTIFICANTE:</strong> {{ registro.institution|upper }}</p>
-                                {% else %}
-                                    <p><strong>CERTIFICACIÓN:</strong> NO</p>
-                                {% endif %}
-                                {% if registro.images %}
-                                    <p><strong>IMÁGENES:</strong> {% if registro.images %}<a href="{{ asset('uploads/images/products/' ~ registro.images) }}" target="_blank"><img src="{{ asset('uploads/images/products/' ~ registro.images) }}" width="100"></a>{% endif %}</p>
-                                {% endif %}
-<p><strong>DELEGACIONES DONDE PRESTA SERVICIO:</strong>
-				{% for delegacion in registro.delegacion %}
-    <li style="display: inline;">{{ delegacion.name }}{% if not loop.last %} - {% endif %} </li>
-{% endfor %}</p>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="d-flex justify-content-between gap-2">
-                                    <button type="button" class="btn btn-primary d-flex align-items-center justify-content-center flex-grow-1" data-bs-toggle="collapse" data-bs-target="#comentario-{{ registro.id }}" style="height: 50px;"><span class="text-center">NUEVO COMENTARIO</span></button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="height: 50px;">CERRAR</button>
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="d-flex align-items-center gap-2 p-3 bg-light rounded">
+                                <i class="fas fa-id-card text-primary fs-5"></i>
+                                <div>
+                                    <small class="text-muted d-block">NRO. DE REGISTRO</small>
+                                    <strong class="fs-5">#{{ registro.id }}</strong>
                                 </div>
                             </div>
-
-                            <!-- Comentarios -->
-                            <div class="collapse mt-3" id="comentario-{{ registro.id }}">
-                                <h5>NUEVO COMENTARIO</h5>
-                                <p class="card-text">
-                                    <input type="text" id="name-{{ registro.id }}" placeholder="INGRESE SU NOMBRE" style="font-size: 1.25rem;">
-                                </p>
-                                <textarea class="form-control" id="comentario-text-{{ registro.id }}" rows="3" placeholder="ESCRIBA SU COMENTARIO..." maxlength="250" style="font-size: 1.25rem;"></textarea>
-                                <div class="rating mt-3">
-                                    <h6>CALIFICACIÓN:</h6>
-                                    <div class="star-rating" id="star-rating-{{ registro.id }}">
-                                        {% for i in 1..5 %}
-                                            <input type="radio" name="rating-{{ registro.id }}" id="star{{ i }}-{{ registro.id }}" value="{{ i }}" style="font-size: 1.25rem;">
-                                            <label for="star{{ i }}-{{ registro.id }}">{{ i }}</label>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-success mt-2 d-flex align-items-center justify-content-center" onclick="guardarComentario('{{ registro.id }}')" style="height: 50px; width: 150px; font-size: 1rem;">
-                                    <span class="text-center">ENVIAR COMENTARIO</span>
-                                </button>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-user me-1"></i>NOMBRE</small>
+                                <strong class="text-uppercase">{{ registro.name|upper }}</strong>
                             </div>
-
-                            <!-- Comentarios guardados -->
-                            <div class="mt-3 border p-2 mb-2" id="comentario-guardado-{{ registro.id }}"></div>
-
-                            <!-- Mostrar comentarios existentes -->
-                            <div class="mt-3">
-                                {% if registro.comments|length > 0 %}
-                                    {% for comment in registro.comments|reverse %}
-                                        <div class="border p-2 mb-2">
-                                            <p><strong>NOMBRE: </strong>{{ comment.name|upper }}
-                                            <strong>CALIFICACIÓN: </strong>{% for i in 1..comment.calification %}⭐{% endfor %}
-                                            <strong>COMENTARIO: </strong>{{ comment.comment|upper }}</p>
-                                        </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-briefcase me-1"></i>OFICIO</small>
+                                <strong class="text-uppercase">{{ registro.oficio.name|upper }}</strong>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-map-marker-alt me-1"></i>DOMICILIO LABORAL</small>
+                                <strong class="text-uppercase">{% if registro.workAddress %}{{ registro.workAddress|upper }}{% else %}No especificado{% endif %}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-info-circle me-1"></i>DESCRIPCIÓN</small>
+                                <p class="mb-0 text-uppercase">{{ registro.description|upper }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-phone me-1"></i>TELÉFONO</small>
+                                <strong class="text-uppercase">{{ registro.phone|upper }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-envelope me-1"></i>EMAIL</small>
+                                <strong class="text-uppercase">{{ registro.email|upper }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-clock me-1"></i>HORARIOS</small>
+                                <strong class="text-uppercase">{{ registro.time|upper }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-credit-card me-1"></i>PAGO</small>
+                                <strong class="text-uppercase">{{ registro.payment|upper }}</strong>
+                            </div>
+                        </div>
+                        
+                        {% if registro.certification %}
+                        <div class="col-12">
+                            <div class="p-3 bg-success bg-opacity-10 rounded border-start border-success border-4">
+                                <small class="text-muted d-block mb-1"><i class="fas fa-certificate me-1 text-success"></i>CERTIFICACIÓN</small>
+                                <strong class="text-uppercase d-block">{{ registro.institution|upper }}</strong>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if registro.images %}
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded">
+                                <small class="text-muted d-block mb-2"><i class="fas fa-image me-1"></i>IMÁGENES</small>
+                                <a href="{{ asset('uploads/images/products/' ~ registro.images) }}" target="_blank" class="d-inline-block">
+                                    <img src="{{ asset('uploads/images/products/' ~ registro.images) }}" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded">
+                                <small class="text-muted d-block mb-2"><i class="fas fa-map-marked-alt me-1"></i>DELEGACIONES</small>
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% for delegacion in registro.delegacion %}
+                                        <span class="badge bg-secondary">{{ delegacion.name }}</span>
                                     {% endfor %}
-                                {% else %}
-                                    <p>NO HAY COMENTARIOS PARA MOSTRAR.</p>
-                                {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Sección de Comentarios Colapsable -->
+                <div class="collapse border-top" id="comentario-{{ registro.id }}">
+                    <div class="p-4 bg-light">
+                        <h6 class="fw-bold mb-3 text-primary">
+                            <i class="fas fa-pen me-2"></i>DEJAR COMENTARIO
+                        </h6>
+                        
+                        <div class="mb-3">
+                            <input type="text" id="name-{{ registro.id }}" class="form-control" placeholder="Ingrese su nombre">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <textarea class="form-control" id="comentario-text-{{ registro.id }}" rows="3" placeholder="Escriba su comentario..." maxlength="250"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Calificación:</label>
+                            <div class="star-rating d-flex gap-2" id="star-rating-{{ registro.id }}">
+                                {% for i in 1..5 %}
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="radio" name="rating-{{ registro.id }}" id="star{{ i }}-{{ registro.id }}" value="{{ i }}">
+                                        <label class="form-check-label fs-5" for="star{{ i }}-{{ registro.id }}">⭐</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn-modern btn-modern-primary" onclick="guardarComentario('{{ registro.id }}')">
+                            <i class="fas fa-paper-plane me-2"></i>ENVIAR COMENTARIO
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Comentarios existentes -->
+                <div class="p-4 bg-light border-top">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-comments me-2 text-primary"></i>COMENTARIOS
+                    </h6>
+                    
+                    <div id="comentario-guardado-{{ registro.id }}"></div>
+                    
+                    {% if registro.comments|length > 0 %}
+                        <div class="d-flex flex-column gap-2">
+                            {% for comment in registro.comments|reverse|slice(0, 5) %}
+                                <div class="bg-white p-3 rounded shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <strong class="text-primary">{{ comment.name|upper }}</strong>
+                                        <span class="badge bg-warning text-dark">{% for i in 1..comment.calification %}⭐{% endfor %}</span>
+                                    </div>
+                                    <p class="mb-0 text-secondary text-uppercase small">{{ comment.comment|upper }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center mb-0">
+                            <i class="fas fa-info-circle me-2"></i>No hay comentarios aún. ¡Sé el primero!
+                        </p>
+                    {% endif %}
+                </div>
+                
+                <div class="modal-footer bg-white">
+                    <div class="d-flex gap-2 w-100">
+                        <button type="button" class="btn-modern btn-modern-primary flex-grow-1" data-bs-toggle="collapse" data-bs-target="#comentario-{{ registro.id }}">
+                            <i class="fas fa-comment me-2"></i>COMENTAR
+                        </button>
+                        <button type="button" class="btn-modern btn-modern-outline" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>CERRAR
+                        </button>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
+        </div>
     </div>
-</div>
+{% endfor %}
 {% endblock %}
 
 {% block javascripts %}

@@ -1,14 +1,355 @@
 <!DOCTYPE html>
-<html class="h-100">
+<html class="h-100" lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}My App{% endblock %}</title>
-         <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#f97316">
+    <title>{% block title %}Registro de Oficios - Posadas{% endblock %}</title>
+    
+    <!-- Preconnect para performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     {% block stylesheets %}
     <link rel="shortcut icon" href="{{ asset('uploads/images/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Design System CSS -->
+    <style>
+        /* ============================================
+           DESIGN SYSTEM - REGISTRO DE OFICIOS
+           Mobile-First | Modern | Accessible
+           ============================================ */
+        
+        /* CSS Variables para theming consistente */
+        :root {
+            --color-primary: #f97316;
+            --color-primary-dark: #ea580c;
+            --color-primary-light: #fdba74;
+            --color-secondary: #3b82f6;
+            --color-success: #10b981;
+            --color-dark: #1f2937;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-500: #6b7280;
+            --color-gray-700: #374151;
+            --color-white: #ffffff;
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            --transition-fast: 150ms ease-in-out;
+            --transition-base: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+            
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+        }
+        
+        /* Base resets */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-dark);
+            background-color: var(--color-gray-100);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5em;
+            color: var(--color-dark);
+        }
+        
+        h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+        h2 { font-size: clamp(1.25rem, 3vw, 1.875rem); }
+        h3 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+        h4 { font-size: clamp(1rem, 2vw, 1.25rem); }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        /* ============================================
+           LAYOUT UTILITIES
+           ============================================ */
+        .container-modern {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .container-modern { padding: 0 1.5rem; }
+        }
+        
+        @media (min-width: 1024px) {
+            .container-modern { padding: 0 2rem; }
+        }
+        
+        /* ============================================
+           CARDS MODERNAS
+           ============================================ */
+        .card-modern {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            overflow: hidden;
+            border: none;
+        }
+        
+        .card-modern:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .card-modern-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+        
+        .card-modern-body {
+            padding: 1.25rem;
+        }
+        
+        @media (min-width: 768px) {
+            .card-modern-header, .card-modern-body {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* ============================================
+           BOTONES MODERNOS
+           ============================================ */
+        .btn-modern {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            min-height: 48px;
+        }
+        
+        @media (min-width: 768px) {
+            .btn-modern {
+                padding: 0.875rem 2rem;
+                font-size: var(--font-size-lg);
+            }
+        }
+        
+        .btn-modern-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            box-shadow: 0 4px 14px 0 rgba(249, 115, 22, 0.39);
+        }
+        
+        .btn-modern-primary:hover {
+            background-color: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(249, 115, 22, 0.23);
+            color: var(--color-white);
+        }
+        
+        .btn-modern-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+        
+        .btn-modern-outline {
+            background-color: transparent;
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+        
+        .btn-modern-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        
+        /* ============================================
+           FORMULARIOS MODERNOS
+           ============================================ */
+        .form-modern .form-label {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-modern .form-control,
+        .form-modern .form-select {
+            padding: 0.875rem 1rem;
+            font-size: var(--font-size-base);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            min-height: 48px;
+        }
+        
+        .form-modern .form-control:focus,
+        .form-modern .form-select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+        
+        .form-modern .form-control::placeholder {
+            color: var(--color-gray-300);
+            text-transform: uppercase;
+        }
+        
+        /* ============================================
+           PAGINATION MODERNA
+           ============================================ */
+        .pagination-modern {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .pagination-modern .page-link {
+            padding: 0.5rem 0.875rem;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            background-color: var(--color-white);
+            color: var(--color-gray-700);
+            transition: all var(--transition-fast);
+        }
+        
+        @media (min-width: 768px) {
+            .pagination-modern .page-link {
+                padding: 0.625rem 1rem;
+                font-size: var(--font-size-base);
+            }
+        }
+        
+        .pagination-modern .page-link:hover {
+            background-color: var(--color-gray-100);
+            color: var(--color-dark);
+        }
+        
+        .pagination-modern .active .page-link {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        
+        /* ============================================
+           FOOTER MODERNO
+           ============================================ */
+        .footer-modern {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: var(--color-white);
+            padding: 1.5rem 0;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-modern {
+                padding: 2rem 0;
+            }
+        }
+        
+        /* ============================================
+           UTILIDADES RESPONSIVE
+           ============================================ */
+        .text-responsive {
+            font-size: clamp(0.875rem, 2vw, 1rem);
+        }
+        
+        .heading-responsive {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+        }
+        
+        /* Touch targets accesibles */
+        .touch-target {
+            min-height: 48px;
+            min-width: 48px;
+        }
+        
+        /* ============================================
+           ANIMACIONES
+           ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        /* ============================================
+           ACCESIBILIDAD
+           ============================================ */
+        :focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        /* Reduce motion para usuarios que lo prefieren */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
     {% endblock %}
 </head>
 <body class="d-flex flex-column h-100">
@@ -18,8 +359,22 @@
         {% endblock %}
     </main>
 
-    <!-- Bootstrap 5 JS (optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Utility Scripts -->
+    <script>
+        // Auto-cerrar alertas después de 5 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    const closeBtn = alert.querySelector('.btn-close');
+                    if (closeBtn) closeBtn.click();
+                }, 5000);
+            });
+        });
+    </script>
     
     {% block javascripts %}
     <script>
@@ -104,10 +459,13 @@
 }
   </style>
     {% endblock %}
-    <!-- Footer -->
-    <footer class="mt-auto py-3 text-center text-white" style="background-color: #f97316;">
-        <div class="container">
-            <p class="mb-0">&copy; 2026 Registro de Oficios. Todos los derechos reservados.</p>
+    <!-- Modern Footer -->
+    <footer class="footer-modern mt-auto">
+        <div class="container-modern text-center">
+            <p class="mb-0 fs-6">
+                <i class="fas fa-heart text-white-50 me-2"></i>
+                &copy; 2026 Registro de Oficios de Posadas. Todos los derechos reservados.
+            </p>
         </div>
     </footer>
 </body>

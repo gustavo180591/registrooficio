@@ -29,4 +29,5 @@
 ###> multimedia ###
 /public/images/
 /public/videos/
+/public/uploads/
 ###< multimedia ###
