@@ -4,8 +4,8 @@ namespace App\Form;
 
 use App\Entity\Delegacion;
 use App\Entity\Oficio;
-use App\Entity\Registro;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -45,7 +45,9 @@ class BusquedaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Registro::class,
+            // No vincular a ninguna entidad para evitar validación completa
+            'data_class' => null,
+            'csrf_protection' => true,
         ]);
     }
 }

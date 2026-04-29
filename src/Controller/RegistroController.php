@@ -43,32 +43,57 @@ class RegistroController extends AbstractController
     #[Route('/buscar', name: 'app_lista')]
     public function lista(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $registro = new Registro();
-        $form = $this->createForm(BusquedaType::class, $registro);
+        $form = $this->createForm(BusquedaType::class);
         $form->handleRequest($request);
 
         // Si se envía el formulario, buscar con los filtros aplicados
         if ($form->isSubmitted() && $form->isValid()) {
-            $oficio = $registro->getOficio();
-            $delegaciones = $registro->getDelegacion()->toArray();
-            
+            $data = $form->getData();
+            $oficio = $data['oficio'] ?? null;
+            // Extraer IDs de las delegaciones seleccionadas
+            $delegaciones = [];
+            if (isset($data['delegacion'])) {
+                $delegaciones = array_map(function($d) { return $d->getId(); }, $data['delegacion']->toArray());
+            }
+
             // Get pagination parameters
             $page = $request->query->get('page', 1);
             $limit = 12;
-            
+
             $lista = $entityManager->getRepository(Registro::class)->buscar($oficio, $delegaciones, $page, $limit);
-            
+
             // Get total count for pagination
             $totalItems = $entityManager->getRepository(Registro::class)->countResults($oficio, $delegaciones);
             $totalPages = ceil($totalItems / $limit);
-            
+
+            // Variables para mensajes cuando no hay resultados
+            $noResultsMessage = null;
+            $alternativeDelegaciones = [];
+            $hasOficioInAnyDelegacion = false;
+
+            // Si no hay resultados y se filtró por oficio y delegación
+            if ($totalItems === 0 && $oficio !== null && !empty($delegaciones)) {
+                // Verificar si hay registros de ese oficio en alguna delegación
+                $countOficioTotal = $entityManager->getRepository(Registro::class)->countByOficioOnly($oficio);
+
+                if ($countOficioTotal > 0) {
+                    // Hay registros con ese oficio en otras delegaciones
+                    $hasOficioInAnyDelegacion = true;
+                    $alternativeDelegaciones = $entityManager->getRepository(Registro::class)->findDelegacionesWithOficio($oficio);
+                }
+            }
+
             return $this->render('registro/lista.html.twig', [
                 'lista' => $lista,
                 'form' => $form,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
                 'totalItems' => $totalItems,
-                'limit' => $limit
+                'limit' => $limit,
+                'oficio' => $oficio,
+                'delegaciones' => $delegaciones,
+                'hasOficioInAnyDelegacion' => $hasOficioInAnyDelegacion,
+                'alternativeDelegaciones' => $alternativeDelegaciones
             ]);
         }
         
@@ -105,7 +130,11 @@ JOIN r.oficio o
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalItems' => $totalItems,
-            'limit' => $limit
+            'limit' => $limit,
+            'oficio' => null,
+            'delegaciones' => [],
+            'hasOficioInAnyDelegacion' => false,
+            'alternativeDelegaciones' => []
         ]);
     }
 

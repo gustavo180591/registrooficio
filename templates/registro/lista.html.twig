@@ -370,7 +370,7 @@ LISTA DE REGISTROS
                                     {{ registro.oficio.name|upper }}
                                 </span>
                             </div>
-                            
+
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-start gap-2 mb-2 text-responsive">
                                     <i class="fas fa-briefcase text-primary mt-1 flex-shrink-0"></i>
@@ -385,13 +385,73 @@ LISTA DE REGISTROS
                                     <span class="text-gray-700 text-uppercase">{{ registro.payment|upper }}</span>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-3 pt-3 border-top">
-                                <button type="button" class="btn-modern btn-modern-primary w-100" 
+                                <button type="button" class="btn-modern btn-modern-primary w-100"
                                         data-bs-toggle="modal" data-bs-target="#modal-{{ registro.id }}">
                                     <i class="fas fa-eye me-2"></i>VER DETALLES
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Mensaje cuando no hay resultados -->
+                <div class="col-12">
+                    <div class="card-modern animate-fade-in">
+                        <div class="card-modern-body text-center py-5">
+                            <div class="mb-4">
+                                <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-search text-warning fs-2"></i>
+                                </div>
+                            </div>
+
+                            {% if oficio is defined and oficio is not null and delegaciones is defined and delegaciones is not empty %}
+                                {% if hasOficioInAnyDelegacion %}
+                                    <!-- Caso 1: Hay personas con ese oficio en otras delegaciones -->
+                                    <h3 class="fs-4 fw-bold text-dark mb-3">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                        No tenemos personas con ese oficio en la delegación seleccionada
+                                    </h3>
+                                    <p class="text-gray-700 mb-4 fs-5">
+                                        Pero sí tenemos registros de <strong class="text-primary">{{ oficio.name|upper }}</strong> en estas delegaciones:
+                                    </p>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+                                        {% for del in alternativeDelegaciones %}
+                                            <span class="badge bg-primary fs-6 px-3 py-2">
+                                                <i class="fas fa-map-pin me-1"></i>{{ del.name|upper }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                    <a href="{{ path('app_lista') }}" class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-redo me-2"></i>Realizar nueva búsqueda
+                                    </a>
+                                {% else %}
+                                    <!-- Caso 2: No hay personas con ese oficio en ninguna delegación -->
+                                    <h3 class="fs-4 fw-bold text-dark mb-3">
+                                        <i class="fas fa-user-slash text-danger me-2"></i>
+                                        No hay registros de personas con ese oficio
+                                    </h3>
+                                    <p class="text-gray-700 mb-4 fs-5">
+                                        Actualmente no contamos con <strong class="text-primary">{{ oficio.name|upper }}</strong> en ninguna delegación.
+                                    </p>
+                                    <a href="{{ path('app_lista') }}" class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-search me-2"></i>Buscar otros oficios
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <!-- Caso genérico: no se aplicaron filtros o no hay resultados -->
+                                <h3 class="fs-4 fw-bold text-dark mb-3">
+                                    <i class="fas fa-inbox text-gray-500 me-2"></i>
+                                    No se encontraron resultados
+                                </h3>
+                                <p class="text-gray-700 mb-4">
+                                    Intenta ajustar los filtros de búsqueda o realiza una nueva búsqueda.
+                                </p>
+                                <a href="{{ path('app_lista') }}" class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-redo me-2"></i>Nueva búsqueda
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
