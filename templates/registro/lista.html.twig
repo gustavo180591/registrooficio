@@ -14,6 +14,11 @@
         position: relative;
     }
     
+    /* Permitir que el dropdown se muestre fuera del card */
+    .card-modern.dropdown-allowed {
+        overflow: visible;
+    }
+    
     .custom-dropdown-trigger {
         display: flex;
         justify-content: space-between;
@@ -67,8 +72,6 @@
         border-radius: var(--radius-md);
         box-shadow: var(--shadow-lg);
         z-index: 1050;
-        max-height: 400px;
-        overflow: hidden;
     }
     
     .dropdown-search {
@@ -116,8 +119,9 @@
     }
     
     .dropdown-options {
-        max-height: 280px;
-        overflow-y: auto;
+        max-height: 400px;
+        overflow-y: auto !important;
+        overflow-x: hidden;
     }
     
     .dropdown-option {
@@ -208,11 +212,11 @@
         }
         
         .custom-dropdown-menu {
-            max-height: 350px;
+            max-height: none;
         }
         
         .dropdown-options {
-            max-height: 230px;
+            max-height: 400px;
         }
         
         .modal-dialog {
@@ -222,20 +226,27 @@
     
     /* Scrollbar personalizado para el dropdown */
     .dropdown-options::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
     }
     
     .dropdown-options::-webkit-scrollbar-track {
-        background: var(--color-gray-100);
+        background: #f1f1f1;
+        border-radius: 5px;
     }
     
     .dropdown-options::-webkit-scrollbar-thumb {
-        background: var(--color-gray-300);
-        border-radius: 4px;
+        background: #888;
+        border-radius: 5px;
     }
     
     .dropdown-options::-webkit-scrollbar-thumb:hover {
-        background: var(--color-gray-500);
+        background: #555;
+    }
+    
+    /* Firefox scrollbar */
+    .dropdown-options {
+        scrollbar-width: auto;
+        scrollbar-color: #888 #f1f1f1;
     }
 </style>
 {% endblock %}
@@ -267,7 +278,7 @@ LISTA DE REGISTROS
 <!-- Formulario de Búsqueda -->
 <section class="py-4">
     <div class="container-modern">
-        <div class="card-modern">
+        <div class="card-modern dropdown-allowed">
             <div class="card-modern-header bg-gradient" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
                 <h2 class="text-center text-white mb-0 fs-4 fw-bold">
                     <i class="fas fa-search me-2"></i>BUSCAR PROFESIONALES
@@ -307,7 +318,7 @@ LISTA DE REGISTROS
                                         <i class="fas fa-times"></i>
                                     </span>
                                 </div>
-                                <div class="dropdown-options" id="dropdown-options"></div>
+                                <div class="dropdown-options" id="dropdown-options" style="max-height: 400px; overflow-y: scroll !important; overflow-x: hidden;"></div>
                             </div>
                         </div>
                         
